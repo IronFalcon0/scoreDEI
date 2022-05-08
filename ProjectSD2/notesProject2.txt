@@ -1,0 +1,32 @@
+Commands to run project in container:
+mvn clean install spring-boot:repackage
+./mvnw spring-boot:run
+
+
+Notes project:
+classes que serão criadas em base de dados devem estar na pasta src/main/java/.../data
+
+
+
+Tabelas DB:
+users
+teams
+players
+games
+(playerPos)
+(eventos)?
+
+
+GameState:
+não está a decorrer
+interrompido
+a correr
+terminado
+
+
+É melhor fazer modelo ER (just a sketch)
+
+
+duvidas:
+é suposto ir buscar os dados ao API-SPORTS, se sim todos ou apenas alguns? Ou podemos nós escrever um crip que insere valores para test?
+o que é que o ficheiro demo-0.0.1-SNAPSHOT.jar faz? é preciso?

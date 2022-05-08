@@ -1,0 +1,13 @@
+<form th:action="@{/sumbitOfficeChange}" th:object="${professor}" method="post">
+    <p th:text="'Change office of Prof. ' + *{name}">Professor name here</p>
+    <div="form-row">
+        <div>
+            <input type="hidden" th:field="*{id}">
+        </div>
+        <div>
+            <label>Office</label>
+            <input type="text" th:field="*{office}">
+        </div>
+        <button type="submit">Change office</button>
+    </div>
+</form>
