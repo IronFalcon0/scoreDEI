@@ -1,13 +1,13 @@
 package com.example.data;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Arrays;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
@@ -18,21 +18,22 @@ public class Game {
     private int id;
     private String place;
     private Date date;
-    @OneToMany(mappedBy="teamID")
-    private int idTeam1;
-    @OneToMany(mappedBy="teamID")
-    private int idTeam2;
+    private List<Team> teams; 
     private int goalsTeam1, goalsTeam2;
+    private String gameState;
+    private Team winnerTeam, loserTeam;
+    private Boolean isTie;
 
     public Game() {}
 
-    public Game(String place, Date date, int idTeam1, int idTeam2) {
+    public Game(String place, Date date, Team team1, Team team2) {
         this.place = place;
         this.date = date;
-        this.idTeam1 = idTeam1;
-        this.idTeam2 = idTeam2;
+        this.teams = Arrays.asList(team1, team2);
         goalsTeam1 = 0;
         goalsTeam2 = 0;
+        this.gameState = new String();
+
     }
 
     public int getId() {
@@ -59,20 +60,12 @@ public class Game {
         this.date = date;
     }
 
-    public int getIdTeam1() {
-        return this.idTeam1;
+    public List<Team> getTeams() {
+        return this.teams;
     }
     
-    public void setIdTeam1(int idTeam1) {
-        this.idTeam1 = idTeam1;
-    }
-
-    public int getIdTeam2() {
-        return this.idTeam2;
-    }
-    
-    public void setIdTeam2(int idTeam2) {
-        this.idTeam2 = idTeam2;
+    public void setTeams(Team team1, Team team2) {
+        this.teams = Arrays.asList(team1, team2);
     }
 
     public int getGoalsTeam1() {
@@ -89,6 +82,38 @@ public class Game {
     
     public void setGoalsTeam2(int goalsTeam2) {
         this.goalsTeam2 = goalsTeam2;
+    }
+
+    public String getGameState() {
+        return this.gameState;
+    }
+
+    public void setGameState(String gameState) {
+        this.gameState = gameState;
+    }
+
+    public Team getWinnerTeam() {
+        return this.winnerTeam;
+    }
+
+    public void setWinnerTeam(Team team) {
+        this.winnerTeam = team;
+    }
+
+    public Team getLoserTeam() {
+        return this.loserTeam;
+    }
+
+    public void setLoserTeam(Team team) {
+        this.loserTeam = team;
+    }
+
+    public Boolean getIsTie() {
+        return this.isTie;
+    }
+
+    public void setIsTie(Boolean isTie) {
+        this.isTie = isTie;
     }
 
     public String toString() {
