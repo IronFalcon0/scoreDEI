@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.example.data.Professor;
 import com.example.data.Student;
+import com.example.data.Team;
+import com.example.data.Game;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -25,6 +27,12 @@ public class RESTcontroller {
 
     @Autowired
     StudentService studentService;
+
+    @Autowired
+    GameService gameService;
+    
+    @Autowired
+    TeamService teamService;
 
     @GetMapping(value = "professors", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Professor> getProfessors()

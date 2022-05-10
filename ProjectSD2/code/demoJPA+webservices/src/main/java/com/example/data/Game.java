@@ -23,7 +23,7 @@ public class Game {
     private List<Team> teams; 
     private int goalsTeam1, goalsTeam2;
     private String gameState;
-    private Team winnerTeam, loserTeam;
+    //private Team winnerTeam, loserTeam;
     private Boolean isTie;
 
     public Game() {}
@@ -90,7 +90,7 @@ public class Game {
         this.gameState = gameState;
     }
 
-    public Team getWinnerTeam() {
+    /*public Team getWinnerTeam() {
         return this.winnerTeam;
     }
 
@@ -104,7 +104,7 @@ public class Game {
 
     public void setLoserTeam(Team team) {
         this.loserTeam = team;
-    }
+    }*/
 
     public Boolean getIsTie() {
         return this.isTie;

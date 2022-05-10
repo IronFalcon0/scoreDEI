@@ -32,8 +32,8 @@ public class GameService {
     }
 
 
-    public List<Game> findByNameEndsWith(String chars) {
+    /*public List<Game> findByNameEndsWith(String chars) {
         return gameRepository.findByNameEndsWith(chars);
-    }
+    }*/
 
 }

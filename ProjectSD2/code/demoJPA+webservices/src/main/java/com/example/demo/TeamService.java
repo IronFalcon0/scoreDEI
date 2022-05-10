@@ -31,9 +31,9 @@ public class TeamService {
     }
 
 
-    public List<Team> findByNameEndsWith(String chars) {
+    /*public List<Team> findByNameEndsWith(String chars) {
         return teamRepository.findByNameEndsWith(chars);
-    }
+    }*/
 
 
 }
