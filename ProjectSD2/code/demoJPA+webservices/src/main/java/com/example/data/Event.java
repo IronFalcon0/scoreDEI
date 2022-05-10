@@ -23,8 +23,8 @@ public class Event {
     private int id;
     private String content;
     private Date eventTime;
-    @ManyToMany(mappedBy = "events")
-    private Player player;
+   //@ManyToOne()
+    //private Player player;
 
     /*
      * @ManyToOne(mappedBy = "events")
@@ -36,10 +36,10 @@ public class Event {
     public Event() {
     }
 
-    public Event(String content, String telephone, Date eventTime, Player player, Team team, Game game) {
+    public Event(String content, String telephone, Date eventTime, Team team, Game game) {
         this.content = content;
         this.eventTime = eventTime;
-        this.player = player;
+        //this.player = player;
         /*
          * this.team = team;
          * this.game = game;
@@ -73,13 +73,13 @@ public class Event {
         this.content = content;
     }
 
-    public Player getPlayer() {
+    /*public Player getPlayer() {
         return player;
     }
 
     public void setPlayer(Player player) {
         this.player = player;
-    }
+    }*/
 
     /*
      * public Team getTeam() {
@@ -99,7 +99,6 @@ public class Event {
      * }
      */
     public String toString() {
-        return this.content + "(id = " + this.id + "). Content: " + this.content + ". EventTime: " + this.eventTime
-                + ". Player: " + this.player;
+        return this.content + "(id = " + this.id + "). Content: " + this.content + ". EventTime: " + this.eventTime;
     }
 }

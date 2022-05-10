@@ -5,6 +5,8 @@
 /workspace/demoJPA+webservices/src/main/java/com/example/demo/DataController.java
 /workspace/demoJPA+webservices/src/main/java/com/example/demo/DemoApplication.java
 /workspace/demoJPA+webservices/src/main/java/com/example/demo/RESTcontroller.java
+/workspace/demoJPA+webservices/src/main/java/com/example/data/Game.java
 /workspace/demoJPA+webservices/src/main/java/com/example/demo/ProfRepository.java
+/workspace/demoJPA+webservices/src/main/java/com/example/data/Team.java
 /workspace/demoJPA+webservices/src/main/java/com/example/demo/StudentRepository.java
 /workspace/demoJPA+webservices/src/main/java/com/example/data/Student.java

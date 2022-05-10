@@ -25,8 +25,8 @@ public class Player {
     private int id, goalsMarked, yellowCards, redCards;
     private String name, playerPosition;
     private Date birthDate;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Event> events;
+    /*@OneToMany(cascade = CascadeType.ALL)
+    private List<Event> events;*/
 
     /*
      * @ManyToOne(mappedBy = "players")
