@@ -1,34 +1,49 @@
 package com.example.data;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import org.aspectj.weaver.IntMap;
 
 @Entity
+@JsonIgnoreProperties({ "students" })
 @XmlRootElement
 public class Player {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id, goalsMarked, yellowCards, redCards;
+    private String name, playerPosition;
     private Date birthDate;
-    @OneToMany(mappedBy="teamID")
-    private int idTeam;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Event> events;
 
-    public Player() {}
+    /*
+     * @ManyToOne(mappedBy = "players")
+     * private Team team;
+     */
 
-    public Player(String name, Date birthDate) {
+    public Player() {
+    }
+
+    public Player(String name, String playerPosition, Date birthDate, int goalsMarked, int yellowCards,
+            int redCards) {
         this.name = name;
+        this.playerPosition = playerPosition;
         this.birthDate = birthDate;
+        this.goalsMarked = goalsMarked;
+        this.yellowCards = yellowCards;
+        this.redCards = redCards;
     }
 
     public int getId() {
@@ -43,8 +58,12 @@ public class Player {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getPlayerPosition() {
+        return playerPosition;
+    }
+
+    public void setPlayerPosition(String playerPosition) {
+        this.playerPosition = playerPosition;
     }
 
     public Date getBirthDate() {
@@ -55,8 +74,36 @@ public class Player {
         this.birthDate = birthDate;
     }
 
-    public String toString() {
-        return "todo";
+    public int getGoalsMarked() {
+        return goalsMarked;
     }
-    
+
+    public void setGoalsMarked(int goalsMarked) {
+        this.goalsMarked = goalsMarked;
+    }
+
+    public int getYellowCard() {
+        return yellowCards;
+    }
+
+    public void setYellowCard(int yellowCards) {
+        this.yellowCards = yellowCards;
+    }
+
+    public int getRedCards() {
+        return redCards;
+    }
+
+    public void setRedCards(int redCards) {
+        this.redCards = redCards;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String toString() {
+        return this.name + " (id = " + this.id + "). PlayerPosition: " + this.playerPosition;
+    }
+
 }

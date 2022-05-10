@@ -1,4 +1,5 @@
 com/example/demo/StudentService.class
+com/example/data/PlayerPosition.class
 com/example/demo/RESTcontroller.class
 com/example/demo/ProfService.class
 com/example/formdata/FormData.class
@@ -8,3 +9,4 @@ com/example/demo/DemoApplication.class
 com/example/data/Professor.class
 com/example/data/Student.class
 com/example/demo/DataController.class
+com/example/data/User.class
