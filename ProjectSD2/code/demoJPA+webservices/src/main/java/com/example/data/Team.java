@@ -1,21 +1,17 @@
 package com.example.data;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 
 
 @Entity
 @XmlRootElement
 public class Team {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) @OneToMany(cascade = CascadeType.ALL)
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
     private int image;
@@ -27,8 +23,6 @@ public class Team {
         this.image = image;
     }
 
-    @XmlElementWrapper(name = "TeamID")
-    @XmlElement(name = "teamID")
     public int getId() {
         return id;
     }
