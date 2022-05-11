@@ -2,7 +2,7 @@ package com.example.data;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,7 +31,7 @@ public class Game {
     public Game(String place, Date date) {
         this.place = place;
         this.date = date;
-        //this.teams = Arrays.asList(team1, team2);
+        this.teams = new ArrayList<>();
         goalsTeam1 = 0;
         goalsTeam2 = 0;
         this.gameState = new String();
