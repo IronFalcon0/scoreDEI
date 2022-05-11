@@ -7,6 +7,7 @@ import com.example.data.Professor;
 import com.example.data.Student;
 import com.example.data.Team;
 import com.example.data.Game;
+import com.example.data.User;
 import com.example.formdata.FormData;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class DataController {
     
     @Autowired
     TeamService teamService;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping("/")
     public String redirect() {
