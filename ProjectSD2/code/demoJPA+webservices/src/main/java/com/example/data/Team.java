@@ -1,10 +1,14 @@
 package com.example.data;
 
+import java.util.List;
+import java.util.ArrayList;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
+import javax.persistence.ManyToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
@@ -15,12 +19,23 @@ public class Team {
     private int id;
     private String name;
     private int image;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Game> games;
 
     public Team() {}
 
     public Team(String name, int image) {
         this.name = name;
         this.image = image;
+        this.games = new ArrayList<>();
+    }
+
+    public List<Game> getGames() {
+        return games;
+    }
+    
+    public void setGames(List<Game> games) {
+        this.games = games;
     }
 
     public int getId() {

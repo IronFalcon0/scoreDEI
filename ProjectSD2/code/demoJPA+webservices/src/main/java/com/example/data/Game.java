@@ -2,12 +2,13 @@ package com.example.data;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
@@ -18,18 +19,19 @@ public class Game {
     private int id;
     private String place;
     private Date date;
+    @ManyToMany(mappedBy="games")
     private List<Team> teams; 
     private int goalsTeam1, goalsTeam2;
     private String gameState;
-    private Team winnerTeam, loserTeam;
+    //private Team winnerTeam, loserTeam;
     private Boolean isTie;
 
     public Game() {}
 
-    public Game(String place, Date date, Team team1, Team team2) {
+    public Game(String place, Date date) {
         this.place = place;
         this.date = date;
-        this.teams = Arrays.asList(team1, team2);
+        this.teams = new ArrayList<>();
         goalsTeam1 = 0;
         goalsTeam2 = 0;
         this.gameState = new String();
@@ -61,11 +63,7 @@ public class Game {
     }
 
     public List<Team> getTeams() {
-        return this.teams;
-    }
-    
-    public void setTeams(Team team1, Team team2) {
-        this.teams = Arrays.asList(team1, team2);
+        return teams;
     }
 
     public int getGoalsTeam1() {
@@ -92,7 +90,7 @@ public class Game {
         this.gameState = gameState;
     }
 
-    public Team getWinnerTeam() {
+    /*public Team getWinnerTeam() {
         return this.winnerTeam;
     }
 
@@ -106,7 +104,7 @@ public class Game {
 
     public void setLoserTeam(Team team) {
         this.loserTeam = team;
-    }
+    }*/
 
     public Boolean getIsTie() {
         return this.isTie;
