@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
@@ -22,12 +24,20 @@ public class Team {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Game> games;
 
+    @OneToMany(mappedBy="teamPlayer", cascade = CascadeType.ALL)
+    private List<Player> players;
+
+    @OneToMany(mappedBy="teamEvent", cascade = CascadeType.ALL)
+    private List<Event> events;
+
     public Team() {}
 
     public Team(String name, int image) {
         this.name = name;
         this.image = image;
         this.games = new ArrayList<>();
+        this.players = new ArrayList<>();
+        this.events = new ArrayList<>();
     }
 
     public List<Game> getGames() {
@@ -36,6 +46,22 @@ public class Team {
     
     public void setGames(List<Game> games) {
         this.games = games;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+    
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+    
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 
     public int getId() {

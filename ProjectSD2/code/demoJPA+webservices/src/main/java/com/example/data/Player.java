@@ -1,5 +1,6 @@
 package com.example.data;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -25,17 +27,13 @@ public class Player {
     private int goalsMarked, yellowCards, redCards;
     private String name, playerPosition;
     private Date birthDate;
-    /*
-     * @OneToMany(mappedBy="teamID")
-     * private int idTeam;
-     * 
-     * @OneToMany(cascade = CascadeType.ALL)
-     * private List<Event> events;
-     */
-    /*
-     * @ManyToOne(mappedBy = "players")
-     * private Team team;
-     */
+    
+    @ManyToOne()
+    private Team teamPlayer;
+
+    @OneToMany(mappedBy="playerEvent", cascade = CascadeType.ALL)
+    private List<Event> events;
+     
 
     public Player() {
     }
@@ -48,6 +46,16 @@ public class Player {
         this.goalsMarked = goalsMarked;
         this.yellowCards = yellowCards;
         this.redCards = redCards;
+        this.teamPlayer = new Team();
+        this.events = new ArrayList<>();
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+    
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 
     public int getId() {
@@ -104,6 +112,10 @@ public class Player {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Team getTeam() {
+        return teamPlayer;
     }
 
     public String toString() {

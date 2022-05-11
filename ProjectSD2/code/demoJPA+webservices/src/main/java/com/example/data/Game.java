@@ -4,11 +4,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
@@ -26,6 +28,9 @@ public class Game {
     //private Team winnerTeam, loserTeam;
     private Boolean isTie;
 
+    @OneToMany(mappedBy="game", cascade = CascadeType.ALL)
+    private List<Event> events;
+
     public Game() {}
 
     public Game(String place, Date date) {
@@ -35,6 +40,7 @@ public class Game {
         goalsTeam1 = 0;
         goalsTeam2 = 0;
         this.gameState = new String();
+        this.events = new ArrayList<>();
 
     }
 
@@ -116,6 +122,14 @@ public class Game {
 
     public String toString() {
         return "todo";
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+    
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 
 }
