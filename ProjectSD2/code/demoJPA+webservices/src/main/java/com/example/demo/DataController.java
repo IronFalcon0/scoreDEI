@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @Controller
 public class DataController {
     @Autowired
@@ -29,7 +28,7 @@ public class DataController {
 
     @Autowired
     GameService gameService;
-    
+
     @Autowired
     TeamService teamService;
 
@@ -46,20 +45,20 @@ public class DataController {
         return "createData";
     }
 
-	@PostMapping("/saveData")
-	public String saveData(Model model) {
-        Professor[] myprofs = { 
-            new Professor("José", "D3.1"), 
-            new Professor("Paulo", "135"), 
-            new Professor("Estrela", "180")
+    @PostMapping("/saveData")
+    public String saveData(Model model) {
+        Professor[] myprofs = {
+                new Professor("José", "D3.1"),
+                new Professor("Paulo", "135"),
+                new Professor("Estrela", "180")
         };
-        Student[] mystudents = { 
-            new Student("Paula", "91999991", 21),
-            new Student("Artur", "91999992", 21),
-            new Student("Rui", "91999993", 19),
-            new Student("Luísa", "91999994", 20),
-            new Student("Alexandra", "91999995", 21),
-            new Student("Carlos", "91999995", 22)
+        Student[] mystudents = {
+                new Student("Paula", "91999991", 21),
+                new Student("Artur", "91999992", 21),
+                new Student("Rui", "91999993", 19),
+                new Student("Luísa", "91999994", 20),
+                new Student("Alexandra", "91999995", 21),
+                new Student("Carlos", "91999995", 22)
         };
 
         mystudents[0].addProf(myprofs[0]);
@@ -75,9 +74,9 @@ public class DataController {
 
         for (Student s : mystudents)
             this.studentService.addStudent(s);
-    
-		return "redirect:/listStudents";
-	}
+
+        return "redirect:/listStudents";
+    }
 
     @GetMapping("/listStudents")
     public String listStudents(Model model) {
@@ -93,22 +92,32 @@ public class DataController {
     }
 
     @GetMapping("/editStudent")
-    public String editStudent(@RequestParam(name="id", required=true) int id, Model m) {
+    public String editStudent(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Student> op = this.studentService.getStudent(id);
         if (op.isPresent()) {
             m.addAttribute("student", op.get());
             m.addAttribute("allProfessors", this.profService.getAllProfessors());
             return "editStudent";
-        }
-        else {
+        } else {
             return "redirect:/listStudents";
         }
-    }    
+    }
 
     @PostMapping("/saveStudent")
     public String saveStudent(@ModelAttribute Student st) {
         this.studentService.addStudent(st);
         return "redirect:/listStudents";
+    }
+
+    @GetMapping("/loginUser")
+    public String getLoginPage() {
+        // this.userService.getUser(user);
+        return "login";
+    }
+
+    @GetMapping("/register")
+    public String getRegisterPage() {
+        return "register";
     }
 
     @GetMapping("/queryStudents")
@@ -147,9 +156,9 @@ public class DataController {
     }
 
     @GetMapping("/editProfessor")
-    public String editProfessor(@RequestParam(name="id", required=true) int id, Model m) {
+    public String editProfessor(@RequestParam(name = "id", required = true) int id, Model m) {
         return getEditProfessorForm(id, "editProfessor", m);
-    }    
+    }
 
     @PostMapping("/saveProfessor")
     public String saveProfessor(@ModelAttribute Professor prof) {
@@ -159,7 +168,7 @@ public class DataController {
 
     /* For the sake of illustrating the use of @Transactional */
     @GetMapping("/changeOffice")
-    public String getOfficeForm(@RequestParam(name="id", required=true) int id, Model m) {
+    public String getOfficeForm(@RequestParam(name = "id", required = true) int id, Model m) {
         return getEditProfessorForm(id, "editProfessorOffice", m);
     }
 
