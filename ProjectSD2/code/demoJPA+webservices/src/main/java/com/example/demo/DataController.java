@@ -120,6 +120,19 @@ public class DataController {
         return "register";
     }
 
+    @GetMapping("/gameDetails") // /gameDetails{id} -- how?
+    public String gameDetails(@RequestParam(name = "id", required = true) int id, Model m) {
+        Optional<Game> op = this.gameService.getGame(id);
+        if (op.isPresent()) {
+            m.addAttribute("game", op.get());
+            m.addAttribute("teams", this.gameService.getGameTeams(id));
+            m.addAttribute("events", this.gameService.getGameEvents(id));
+            return "game";
+        } else {
+            return "redirect:/homepage";
+        }
+    }
+
     @GetMapping("/queryStudents")
     public String queryStudent1(Model m) {
         m.addAttribute("person", new FormData());

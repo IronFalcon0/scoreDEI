@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Game Details</title>
+    <meta charset="utf8" />
+</head>
+
+<body>
+    <form th:action="@{/gameDetails}" th:object="${game}" method="get">
+        <p th:text="${teams[0]}">: </p>
+        <p th:text="game.goalsTeam1"> - </p>
+        <p th:text="${teams[1]}">: </p>
+        <p th:text="game.goalsTeam2"></p>
+        <br> Date: <p th:text="${game.date}"> </p>
+        <br> Local: <p th:text="${game.local}"> </p>
+        <br>
+        <h3>Event List</h3>
+        <br>
+        <table border="1">
+            <tr>
+                <th>TIME</th>
+                <th>EVENT</th>
+            </tr>
+            <tr th:each="e : ${events}">
+                <td th:text="${e.eventTime}">eventTime</td>
+                <td th:text="${e.content}">content</td>
+            </tr>
+        </table>
+    </form>
+</body>
+
+</html>

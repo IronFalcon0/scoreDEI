@@ -2,6 +2,7 @@ package com.example.data;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.ArrayList;
 
 import javax.persistence.CascadeType;
@@ -13,25 +14,26 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 @Entity
 @XmlRootElement
 public class Game {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String place;
     private Date date;
-    @ManyToMany(mappedBy="games")
-    private List<Team> teams; 
+    @ManyToMany(mappedBy = "games")
+    private List<Team> teams;
     private int goalsTeam1, goalsTeam2;
     private String gameState;
-    //private Team winnerTeam, loserTeam;
+    // private Team winnerTeam, loserTeam;
     private Boolean isTie;
 
-    @OneToMany(mappedBy="game", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Event> events;
 
-    public Game() {}
+    public Game() {
+    }
 
     public Game(String place, Date date) {
         this.place = place;
@@ -47,7 +49,7 @@ public class Game {
     public int getId() {
         return this.id;
     }
-    
+
     public void setId(int id) {
         this.id = id;
     }
@@ -55,7 +57,7 @@ public class Game {
     public String getPlace() {
         return this.place;
     }
-    
+
     public void setPlace(String place) {
         this.place = place;
     }
@@ -63,7 +65,7 @@ public class Game {
     public Date getDate() {
         return this.date;
     }
-    
+
     public void setPlace(Date date) {
         this.date = date;
     }
@@ -75,7 +77,7 @@ public class Game {
     public int getGoalsTeam1() {
         return this.goalsTeam1;
     }
-    
+
     public void setGoalsTeam1(int goalsTeam1) {
         this.goalsTeam1 = goalsTeam1;
     }
@@ -83,7 +85,7 @@ public class Game {
     public int getGoalsTeam2() {
         return this.goalsTeam2;
     }
-    
+
     public void setGoalsTeam2(int goalsTeam2) {
         this.goalsTeam2 = goalsTeam2;
     }
@@ -96,21 +98,23 @@ public class Game {
         this.gameState = gameState;
     }
 
-    /*public Team getWinnerTeam() {
-        return this.winnerTeam;
-    }
-
-    public void setWinnerTeam(Team team) {
-        this.winnerTeam = team;
-    }
-
-    public Team getLoserTeam() {
-        return this.loserTeam;
-    }
-
-    public void setLoserTeam(Team team) {
-        this.loserTeam = team;
-    }*/
+    /*
+     * public Team getWinnerTeam() {
+     * return this.winnerTeam;
+     * }
+     * 
+     * public void setWinnerTeam(Team team) {
+     * this.winnerTeam = team;
+     * }
+     * 
+     * public Team getLoserTeam() {
+     * return this.loserTeam;
+     * }
+     * 
+     * public void setLoserTeam(Team team) {
+     * this.loserTeam = team;
+     * }
+     */
 
     public Boolean getIsTie() {
         return this.isTie;
@@ -127,7 +131,7 @@ public class Game {
     public List<Event> getEvents() {
         return events;
     }
-    
+
     public void setEvents(List<Event> events) {
         this.events = events;
     }
