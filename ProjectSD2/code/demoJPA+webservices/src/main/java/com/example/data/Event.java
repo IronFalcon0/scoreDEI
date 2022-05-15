@@ -15,6 +15,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @XmlRootElement
 public class Event {
@@ -22,6 +24,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String content;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date eventTime;
 
     @ManyToOne()
