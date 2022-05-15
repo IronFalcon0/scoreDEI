@@ -21,6 +21,13 @@ public class TeamService {
         return userRecords;    
     }
 
+    public List<Team> getAllTeamsInfo()  
+    {    
+        List<Team>userRecords = new ArrayList<>();    
+        teamRepository.findAll().forEach(userRecords::add);    
+        return userRecords;    
+    }
+
     public void addTeam(Team team)  
     {    
         teamRepository.save(team);    
@@ -30,6 +37,14 @@ public class TeamService {
         return teamRepository.findById(id);
     }
 
+    public int getNumberWinner(int teamId) {
+        /*Team teamTemp = this.getTeam(teamId).get();
+        if (teamTemp == null) {
+            return -1;
+        }*/
+
+        return teamRepository.countWinsOfTeam(teamId);
+    }
 
     /*public List<Team> findByNameEndsWith(String chars) {
         return teamRepository.findByNameEndsWith(chars);

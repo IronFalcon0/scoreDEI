@@ -2,6 +2,7 @@ package com.example.demo;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Date;
 
 import com.example.data.Professor;
 import com.example.data.Student;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import ch.qos.logback.core.html.NOPThrowableRenderer;
 
 
 @Controller
@@ -36,9 +39,45 @@ public class DataController {
     @Autowired
     UserService userService;
 
+    @GetMapping("/homepage")
+    public String homePage(Model model) {
+        Game[] games = {
+            new Game("lisboa", new Date()),
+            new Game("lisboa", new Date())
+        };
+        Team[] teams = {
+            new Team("benfica", 0),
+            new Team("porto", 1),
+            new Team("sporting", 2)
+        }; 
+        games[0].setTeams(teams[0], teams[1]);
+        games[1].setTeams(teams[1], teams[2]);
+
+        for (Game g : games)
+            this.gameService.addGame(g);
+
+        model.addAttribute("games", this.gameService.getAllGames());
+        return "homePage";
+    }
+
+    @GetMapping("/listGames")
+    public String listGames(Model model) {
+        model.addAttribute("games", this.gameService.getAllGames());
+        return "homePage";
+    }
+
+    @GetMapping("/stats")
+    public String showStats(Model model) {
+        //model.addAttribute("teams", this.teamService.getAllTeamsInfo());
+        model.addAttribute("result", this.teamService.getNumberWinner(0));
+        return "stats";
+    }
+
+
+
     @GetMapping("/")
     public String redirect() {
-        return "redirect:/listStudents";
+        return "redirect:/homepage";
     }
 
     @GetMapping("/createData")

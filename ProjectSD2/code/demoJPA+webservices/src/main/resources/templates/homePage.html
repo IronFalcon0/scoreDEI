@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Homepage</title>
+        <meta charset="utf8"/>
+    </head>
+    <body>
+        <h1>Home</h1>
+        <br>
+        <!--Admin functionalities-->
+        <a th:href="@{addUser}">Create User</a><br>
+        <a th:href="@{addTeam}">Create Team</a><br>
+        <a th:href="@{addPlayer}">Create Player</a><br>
+        <a th:href="@{addGame}">Create Game</a><br>
+        <a th:href="@{getData}"><button>Fill database</button></a>
+
+        <h2>Games</h2>
+
+        <table border="1">
+            <tr>
+                <th>Game</th>
+                <th>Date</th>
+                <th>Current result</th>
+            </tr>
+            <tr th:each="game : ${games}">
+                
+                <td><a th:href="@{gameInfo(id=${game.id})}"><text th:text="${game.teams[0].name}">name</text><text> vs </text><text th:text="${game.teams[1].name}">name</text></a></td>
+                <td th:text="${game.getDateFormat()}">date</td>
+                <td><text th:text="${game.goalsTeam1}">team1goals</text> <text> - </text> <text th:text="${game.goalsTeam2}">team1goals</text></td>
+                
+            </tr>
+        </table>
+
+        <br>
+        <h2><a th:href="@{stats}">Stats</a></h2>
+
+    </body>
+</html>
