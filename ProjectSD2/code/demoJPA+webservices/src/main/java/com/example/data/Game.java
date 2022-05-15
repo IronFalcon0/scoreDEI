@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,7 +27,7 @@ public class Game {
     private String place;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date date;
-    @ManyToMany(mappedBy="games")
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Team> teams; 
     private int goalsTeam1, goalsTeam2;
     private String gameState;
@@ -139,5 +140,6 @@ public class Game {
         this.teams.add(team2);
 
     }
+
 
 }

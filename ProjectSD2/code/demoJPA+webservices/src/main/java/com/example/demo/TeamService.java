@@ -37,13 +37,8 @@ public class TeamService {
         return teamRepository.findById(id);
     }
 
-    public int getNumberWinner(int teamId) {
-        /*Team teamTemp = this.getTeam(teamId).get();
-        if (teamTemp == null) {
-            return -1;
-        }*/
-
-        return teamRepository.countWinsOfTeam(teamId);
+    public List<Team> listTeamsByWins() {
+        return teamRepository.listWinsOrdered();
     }
 
     /*public List<Team> findByNameEndsWith(String chars) {

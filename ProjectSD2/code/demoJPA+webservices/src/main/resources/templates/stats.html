@@ -8,7 +8,7 @@
         <h1>Stats</h1>
         <br>
 
-        <!--<table border="1">
+        <table border="1">
             <tr>
                 <th>Team Name</th>
                 <th>Number of games</th>
@@ -20,13 +20,10 @@
             <tr th:each="team : ${teams}">
                 
                 <td><text th:text="${team.name}">name</text></td>
-                <td><text th:text="${team.}">name</text></td>
-                <td><text th:text="${team.name}">name</text></td>
+                <td><text th:text="${team.numberWins}">name</text></td>
                 
             </tr>
-        </table>-->
-        <text>RESULT: </text>
-        <text th:text="${result}">result</text>
+        </table>
 
     </body>
 </html>

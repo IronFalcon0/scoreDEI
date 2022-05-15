@@ -21,7 +21,7 @@ public class Team {
     private int id;
     private String name;
     private int image;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy="teams", cascade = CascadeType.ALL)
     private List<Game> games;
     private int numberWins;
     private int numberLoses;

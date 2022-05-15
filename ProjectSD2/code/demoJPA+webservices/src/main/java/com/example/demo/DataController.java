@@ -17,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ch.qos.logback.core.html.NOPThrowableRenderer;
@@ -39,8 +41,15 @@ public class DataController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/homepage")
-    public String homePage(Model model) {
+
+    @GetMapping("/getData")
+    public String getData() {
+        return "getData";
+    }
+
+   // @RequestMapping(value = "/getData", method = { RequestMethod.GET, RequestMethod.POST })
+    @PostMapping("/createData")
+    public String getData(Model model) {
         Game[] games = {
             new Game("lisboa", new Date()),
             new Game("lisboa", new Date())
@@ -52,10 +61,17 @@ public class DataController {
         }; 
         games[0].setTeams(teams[0], teams[1]);
         games[1].setTeams(teams[1], teams[2]);
+        
+        for (Team t: teams) 
+            this.teamService.addTeam(t);
 
         for (Game g : games)
             this.gameService.addGame(g);
+        return "redirect:/homepage";
+    }
 
+    @GetMapping("/homepage")
+    public String homePage(Model model) {
         model.addAttribute("games", this.gameService.getAllGames());
         return "homePage";
     }
@@ -68,8 +84,7 @@ public class DataController {
 
     @GetMapping("/stats")
     public String showStats(Model model) {
-        //model.addAttribute("teams", this.teamService.getAllTeamsInfo());
-        model.addAttribute("result", this.teamService.getNumberWinner(0));
+        model.addAttribute("teams", this.teamService.listTeamsByWins());
         return "stats";
     }
 
