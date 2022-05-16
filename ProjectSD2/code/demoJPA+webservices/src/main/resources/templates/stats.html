@@ -20,7 +20,10 @@
             <tr th:each="team : ${teams}">
                 
                 <td><text th:text="${team.name}">name</text></td>
-                <td><text th:text="${team.numberWins}">name</text></td>
+                <td><text th:text="${team.numberWins + team.numberLoses + team.numberDraws}">nGames</text></td>
+                <td><text th:text="${team.numberWins}">nWins</text></td>
+                <td><text th:text="${team.numberDraws}">nDraws</text></td>
+                <td><text th:text="${team.numberLoses}">nLoses</text></td>
                 
             </tr>
         </table>

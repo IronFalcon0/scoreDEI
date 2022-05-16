@@ -62,8 +62,8 @@ public class Team {
         this.numberLoses = number;
     }
 
-    public int getNumbeDraws() {
-        return numberDraws;
+    public int getNumberDraws() {
+        return this.numberDraws;
     }
 
     public void setNumberDraws(int number) {
@@ -116,6 +116,10 @@ public class Team {
 
     public void setImage(int image) {
         this.image = image;
+    }
+
+    public int numberGames() {
+        return this.numberWins + this.numberDraws + this.numberLoses;
     }
 
     public String toString() {
