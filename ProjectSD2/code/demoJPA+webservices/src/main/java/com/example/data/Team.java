@@ -21,8 +21,11 @@ public class Team {
     private int id;
     private String name;
     private int image;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy="teams", cascade = CascadeType.ALL)
     private List<Game> games;
+    private int numberWins;
+    private int numberLoses;
+    private int numberDraws;
 
     @OneToMany(mappedBy="teamPlayer", cascade = CascadeType.ALL)
     private List<Player> players;
@@ -38,6 +41,33 @@ public class Team {
         this.games = new ArrayList<>();
         this.players = new ArrayList<>();
         this.events = new ArrayList<>();
+        this.numberWins = 0;
+        this.numberLoses = 0;
+        this.numberDraws = 0;
+    }
+
+    public int getNumberWins() {
+        return numberWins;
+    }
+
+    public void setNumberWins(int number) {
+        this.numberWins = number;
+    }
+
+    public int getNumberLoses() {
+        return numberLoses;
+    }
+
+    public void setNumberLoses(int number) {
+        this.numberLoses = number;
+    }
+
+    public int getNumbeDraws() {
+        return numberDraws;
+    }
+
+    public void setNumberDraws(int number) {
+        this.numberDraws = number;
     }
 
     public List<Game> getGames() {

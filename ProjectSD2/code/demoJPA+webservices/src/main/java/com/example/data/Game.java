@@ -3,6 +3,8 @@ package com.example.data;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.persistence.CascadeType;
@@ -11,8 +13,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 @Entity
 @XmlRootElement
@@ -21,13 +27,14 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String place;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date date;
-    @ManyToMany(mappedBy = "games")
-    private List<Team> teams;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Team> teams; 
     private int goalsTeam1, goalsTeam2;
     private String gameState;
-    // private Team winnerTeam, loserTeam;
     private Boolean isTie;
+    private String status;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Event> events;
@@ -43,7 +50,6 @@ public class Game {
         goalsTeam2 = 0;
         this.gameState = new String();
         this.events = new ArrayList<>();
-
     }
 
     public int getId() {
@@ -52,6 +58,14 @@ public class Game {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getStatus() {
+        return this.status;
+    }
+    
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getPlace() {
@@ -66,6 +80,11 @@ public class Game {
         return this.date;
     }
 
+    public String getDateFormat() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        return dateFormat.format(this.date);
+    }
+    
     public void setPlace(Date date) {
         this.date = date;
     }
@@ -98,24 +117,6 @@ public class Game {
         this.gameState = gameState;
     }
 
-    /*
-     * public Team getWinnerTeam() {
-     * return this.winnerTeam;
-     * }
-     * 
-     * public void setWinnerTeam(Team team) {
-     * this.winnerTeam = team;
-     * }
-     * 
-     * public Team getLoserTeam() {
-     * return this.loserTeam;
-     * }
-     * 
-     * public void setLoserTeam(Team team) {
-     * this.loserTeam = team;
-     * }
-     */
-
     public Boolean getIsTie() {
         return this.isTie;
     }
@@ -135,5 +136,13 @@ public class Game {
     public void setEvents(List<Event> events) {
         this.events = events;
     }
+
+    public void setTeams(Team team1, Team team2) {
+        this.teams.clear();
+        this.teams.add(team1);
+        this.teams.add(team2);
+
+    }
+
 
 }

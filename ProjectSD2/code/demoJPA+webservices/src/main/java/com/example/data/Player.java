@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.aspectj.weaver.IntMap;
@@ -26,6 +27,7 @@ public class Player {
     private int id;
     private int goalsMarked, yellowCards, redCards;
     private String name, playerPosition;
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date birthDate;
     
     @ManyToOne()
