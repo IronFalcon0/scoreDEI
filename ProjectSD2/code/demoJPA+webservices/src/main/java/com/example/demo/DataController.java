@@ -118,7 +118,10 @@ public class DataController {
 
     @GetMapping("/stats")
     public String showStats(Model model) {
-        model.addAttribute("teams", this.teamService.listTeamsByWins());
+        model.addAttribute("teamsGames", this.teamService.listTeamsByGames());
+        model.addAttribute("teamsWins", this.teamService.listTeamsByWins());
+        model.addAttribute("teamsDraws", this.teamService.listTeamsByDraws());
+        model.addAttribute("teamsLoses", this.teamService.listTeamsByLoses());
         return "stats";
     }
 

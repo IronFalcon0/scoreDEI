@@ -37,8 +37,20 @@ public class TeamService {
         return teamRepository.findById(id);
     }
 
+    public List<Team> listTeamsByGames() {
+        return teamRepository.listGamesOrdered();
+    }
+
     public List<Team> listTeamsByWins() {
         return teamRepository.listWinsOrdered();
+    }
+
+    public List<Team> listTeamsByDraws() {
+        return teamRepository.listDrawsOrdered();
+    }
+    
+    public List<Team> listTeamsByLoses() {
+        return teamRepository.listLosesOrdered();
     }
 
     /*public List<Team> findByNameEndsWith(String chars) {

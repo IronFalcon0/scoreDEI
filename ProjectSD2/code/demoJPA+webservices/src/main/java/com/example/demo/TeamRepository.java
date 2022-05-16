@@ -15,6 +15,15 @@ public interface TeamRepository extends CrudRepository<Team, Integer> {
     /*@Query(value = "select count(teamIdWinner) from Game g where g.status like 'over' and g.teamIdWinner = ?1", nativeQuery = true)
     public int countWinsOfTeam(int teamId);*/
 
+    @Query("SELECT t FROM Team t ORDER BY numberWins + numberDraws +numberLoses DESC")
+    public List<Team> listGamesOrdered();
+
     @Query("SELECT t FROM Team t ORDER BY numberWins DESC")
     public List<Team> listWinsOrdered();
+
+    @Query("SELECT t FROM Team t ORDER BY numberDraws DESC")
+    public List<Team> listDrawsOrdered();
+    
+    @Query("SELECT t FROM Team t ORDER BY numberLoses DESC")
+    public List<Team> listLosesOrdered();
 }    
