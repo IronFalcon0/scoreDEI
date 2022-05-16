@@ -9,6 +9,8 @@ import com.example.data.Student;
 import com.example.data.Team;
 import com.example.data.Game;
 import com.example.data.User;
+import com.example.data.Event;
+import com.example.data.Player;
 import com.example.formdata.FormData;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,12 @@ public class DataController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    EventService eventService;
+
+    @Autowired
+    PlayerService playerService;
+
 
     @GetMapping("/getData")
     public String getData() {
@@ -61,12 +69,38 @@ public class DataController {
         }; 
         games[0].setTeams(teams[0], teams[1]);
         games[1].setTeams(teams[1], teams[2]);
+
+        Player[] players = {
+            new Player("rod", "avançado", new Date(), teams[0])
+        };
+
+        players[0].setGoalsScored(players[0].getGoalsScored() + 1);
+
+        //event goal
+        Event[] events = {
+            new Event("goal", new Date(), games[0], teams[0], players[0]),
+            new Event("over", new Date(), games[0])
+        };
+        games[0].setGoalsTeam1(games[0].getGoalsTeam1() + 1);
+        games[0].setGameState("over");
+        teams[0].setNumberWins(teams[0].getNumberWins() + 1);
+        teams[1].setNumberLoses(teams[1].getNumberLoses() + 1);
+        players[0].setGoalsScored(players[0].getGoalsScored() + 1);
+
+        
         
         for (Team t: teams) 
             this.teamService.addTeam(t);
 
         for (Game g : games)
             this.gameService.addGame(g);
+
+        for (Player p : players)
+            this.playerService.addPlayer(p);
+
+        for (Event ev : events)
+            this.eventService.addEvent(ev);
+
         return "redirect:/homepage";
     }
 

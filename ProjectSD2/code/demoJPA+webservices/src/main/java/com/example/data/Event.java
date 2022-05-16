@@ -27,25 +27,49 @@ public class Event {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date eventTime;
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     private Game game;
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     private Team teamEvent;
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     private Player playerEvent;
 
 
     public Event() {
     }
 
-    public Event(String content, String telephone, Date eventTime) {
+    public Event(String content, Date eventTime) {
         this.content = content;
         this.eventTime = eventTime;
         this.game = new Game();
         this.teamEvent = new Team();
         this.playerEvent = new Player();
+    }
+
+    public Event(String content, Date eventTime, Game game) {
+        this.content = content;
+        this.eventTime = eventTime;
+        this.game = game;
+        this.teamEvent = new Team();
+        this.playerEvent = new Player();
+    }
+
+    public Event(String content, Date eventTime, Game game, Team team) {
+        this.content = content;
+        this.eventTime = eventTime;
+        this.game = game;
+        this.teamEvent = team;
+        this.playerEvent = new Player();
+    }
+
+    public Event(String content, Date eventTime, Game game, Team team, Player player) {
+        this.content = content;
+        this.eventTime = eventTime;
+        this.game = game;
+        this.teamEvent = team;
+        this.playerEvent = player;
     }
 
     public int getId() {
@@ -79,14 +103,25 @@ public class Event {
         return game;
     }
 
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
     public Team getTeam() {
         return teamEvent;
+    }
+
+    public void setTeam(Team team) {
+        this.teamEvent = team;
     }
 
     public Player getPlayer() {
         return playerEvent;
     }
 
+    public void setPlayer(Player player) {
+        this.playerEvent = player;
+    }
 
     public String toString() {
         return this.content + "(id = " + this.id + "). Content: " + this.content + ". EventTime: " + this.eventTime;

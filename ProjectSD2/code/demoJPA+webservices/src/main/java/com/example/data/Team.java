@@ -46,6 +46,10 @@ public class Team {
         this.numberDraws = 0;
     }
 
+    public void appendEvent(Event event) {
+        this.events.add(event);
+    }
+
     public int getNumberWins() {
         return numberWins;
     }

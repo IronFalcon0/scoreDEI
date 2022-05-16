@@ -25,7 +25,7 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private int goalsMarked, yellowCards, redCards;
+    private int goalsScored, yellowCards, redCards;
     private String name, playerPosition;
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date birthDate;
@@ -40,16 +40,43 @@ public class Player {
     public Player() {
     }
 
-    public Player(String name, String playerPosition, Date birthDate, int goalsMarked, int yellowCards,
+    public Player(String name, String playerPosition, Date birthDate, Team team) {
+        this.name = name;
+        this.playerPosition = playerPosition;
+        this.birthDate = birthDate;
+        this.goalsScored = 0;
+        this.yellowCards = 0;
+        this.redCards = 0;
+        this.teamPlayer = team;
+        this.events = new ArrayList<>();
+    }
+
+    public Player(String name, String playerPosition, Date birthDate, int goalsScored, int yellowCards,
             int redCards) {
         this.name = name;
         this.playerPosition = playerPosition;
         this.birthDate = birthDate;
-        this.goalsMarked = goalsMarked;
+        this.goalsScored = goalsScored;
         this.yellowCards = yellowCards;
         this.redCards = redCards;
         this.teamPlayer = new Team();
         this.events = new ArrayList<>();
+    }
+
+    public Player(String name, String playerPosition, Date birthDate, int goalsScored, int yellowCards,
+            int redCards, Team team) {
+        this.name = name;
+        this.playerPosition = playerPosition;
+        this.birthDate = birthDate;
+        this.goalsScored = goalsScored;
+        this.yellowCards = yellowCards;
+        this.redCards = redCards;
+        this.teamPlayer = team;
+        this.events = new ArrayList<>();
+    }
+
+    public void appendEvent(Event event) {
+        this.events.add(event);
     }
 
     public List<Event> getEvents() {
@@ -88,12 +115,12 @@ public class Player {
         this.birthDate = birthDate;
     }
 
-    public int getGoalsMarked() {
-        return goalsMarked;
+    public int getGoalsScored() {
+        return goalsScored;
     }
 
-    public void setGoalsMarked(int goalsMarked) {
-        this.goalsMarked = goalsMarked;
+    public void setGoalsScored(int goalsScored) {
+        this.goalsScored = goalsScored;
     }
 
     public int getYellowCard() {
