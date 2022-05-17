@@ -71,7 +71,9 @@ public class DataController {
         games[1].setTeams(teams[1], teams[2]);
 
         Player[] players = {
-            new Player("rod", "avançado", new Date(), teams[0])
+            new Player("rod", "avançado", new Date(), teams[0]),
+            new Player("tiago", "avançado", new Date(), teams[0]),
+            new Player("sofia", "avançado", new Date(), teams[1])
         };
 
         players[0].setGoalsScored(players[0].getGoalsScored() + 1);
@@ -85,7 +87,6 @@ public class DataController {
         games[0].setGameState("over");
         teams[0].setNumberWins(teams[0].getNumberWins() + 1);
         teams[1].setNumberLoses(teams[1].getNumberLoses() + 1);
-        players[0].setGoalsScored(players[0].getGoalsScored() + 1);
 
         
         
@@ -119,7 +120,8 @@ public class DataController {
     @GetMapping("/stats")
     public String showStats(Model model) {
         model.addAttribute("teamsGames", this.teamService.listTeamsByGames());
-        model.addAttribute("bestPlayers", this.teamService.listBestPlayers());
+
+        model.addAttribute("bestPlayers", this.playerService.listBestPlayers());
         model.addAttribute("teamsWins", this.teamService.listTeamsByWins());
         model.addAttribute("teamsDraws", this.teamService.listTeamsByDraws());
         model.addAttribute("teamsLoses", this.teamService.listTeamsByLoses());

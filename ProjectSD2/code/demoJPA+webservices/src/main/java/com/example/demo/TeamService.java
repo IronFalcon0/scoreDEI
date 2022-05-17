@@ -54,10 +54,6 @@ public class TeamService {
         return teamRepository.listLosesOrdered();
     }
 
-    public List<Player> listBestPlayers() {
-        return teamRepository.listBestPlayers();
-    }
-
     /*public List<Team> findByNameEndsWith(String chars) {
         return teamRepository.findByNameEndsWith(chars);
     }*/

@@ -27,7 +27,4 @@ public interface TeamRepository extends CrudRepository<Team, Integer> {
     
     @Query("SELECT t FROM Team t ORDER BY numberLoses DESC")
     public List<Team> listLosesOrdered();
-
-    @Query("SELECT t.players FROM Team t where Max(t.players.goalsScored)")
-    public List<Player> listBestPlayers();
 }    
