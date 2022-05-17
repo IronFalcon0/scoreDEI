@@ -8,19 +8,74 @@
         <h1>Stats</h1>
         <br>
 
+        <h3>Games</h3>
         <table border="1">
             <tr>
                 <th>Team Name</th>
                 <th>Number of games</th>
-                <th>Number of wins</th>
-                <th>Number of losses</th>
-                <th>Number of ties</th>
-                <th>Name of the player with more goals</th>
             </tr>
-            <tr th:each="team : ${teams}">
+            <tr th:each="team : ${teamsGames}">
                 
                 <td><text th:text="${team.name}">name</text></td>
-                <td><text th:text="${team.numberWins}">name</text></td>
+                <td><text th:text="${team.numberWins + team.numberLoses + team.numberDraws}">nGames</text></td>
+            </tr>
+        </table>
+
+        <br>
+        <h3>Best Players</h3>
+
+        <table border="1">
+            <tr>
+                <th>Team Name</th>
+                <th>Best Player Name</th>
+                <th>Goals</th>
+            </tr>
+            <tr th:each="player : ${bestPlayers}">
+                <td><text th:text="${player.getTeamName()}">name</text></td>
+                
+                <td><text th:text="${player.name}">name</text></td>
+                <td><text th:text="${player.goalsScored}">nGoals</text></td>
+            </tr>
+        </table>
+
+        <br>
+        <h3>Wins</h3>
+        <table border="1">
+            <tr>
+                <th>Team Name</th>
+                <th>Number of wins</th>
+            </tr>
+            <tr th:each="team : ${teamsWins}">
+                <td><text th:text="${team.name}">name</text></td>
+                <td><text th:text="${team.numberWins}">nWins</text></td>
+                
+            </tr>
+        </table>
+
+        <br>
+        <h3>Draws</h3>
+        <table border="1">
+            <tr>
+                <th>Team Name</th>
+                <th>Number of Draws</th>
+            </tr>
+            <tr th:each="team : ${teamsDraws}">
+                <td><text th:text="${team.name}">name</text></td>
+                <td><text th:text="${team.numberDraws}">nDraws</text></td>
+                
+            </tr>
+        </table>
+
+        <br>
+        <h3>Loses</h3>
+        <table border="1">
+            <tr>
+                <th>Team Name</th>
+                <th>Number of losses</th>
+            </tr>
+            <tr th:each="team : ${teamsLoses}">
+                <td><text th:text="${team.name}">name</text></td>
+                <td><text th:text="${team.numberLoses}">nLoses</text></td>
                 
             </tr>
         </table>

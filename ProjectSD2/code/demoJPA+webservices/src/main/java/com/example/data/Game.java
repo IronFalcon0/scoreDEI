@@ -32,7 +32,6 @@ public class Game {
     private int goalsTeam1, goalsTeam2;
     private String gameState;
     private Boolean isTie;
-    private String status;
 
     @OneToMany(mappedBy="game", cascade = CascadeType.ALL)
     private List<Event> events;
@@ -49,20 +48,16 @@ public class Game {
         this.events = new ArrayList<>();
     }
 
+    public void appendEvent(Event event) {
+        this.events.add(event);
+    }
+
     public int getId() {
         return this.id;
     }
     
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getStatus() {
-        return this.status;
-    }
-    
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getPlace() {

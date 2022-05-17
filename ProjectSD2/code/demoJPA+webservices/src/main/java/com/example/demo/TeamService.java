@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.data.Player;
 import com.example.data.Team;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,20 @@ public class TeamService {
         return teamRepository.findById(id);
     }
 
+    public List<Team> listTeamsByGames() {
+        return teamRepository.listGamesOrdered();
+    }
+
     public List<Team> listTeamsByWins() {
         return teamRepository.listWinsOrdered();
+    }
+
+    public List<Team> listTeamsByDraws() {
+        return teamRepository.listDrawsOrdered();
+    }
+    
+    public List<Team> listTeamsByLoses() {
+        return teamRepository.listLosesOrdered();
     }
 
     /*public List<Team> findByNameEndsWith(String chars) {

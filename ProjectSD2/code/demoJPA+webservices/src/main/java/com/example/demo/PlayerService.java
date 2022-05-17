@@ -29,6 +29,10 @@ public class PlayerService {
         return playerRepository.findById(id);
     }
 
+    public List<Player> listBestPlayers() {
+        return playerRepository.listBestPlayers();
+    }
+
     /*
      * public List<Player> findByNameEndsWith(String chars) {
      * return playerRepository.findByNameEndsWith(chars);
