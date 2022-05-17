@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
+import com.example.data.Player;
 import com.example.data.Team;
 
 
@@ -15,7 +16,7 @@ public interface TeamRepository extends CrudRepository<Team, Integer> {
     /*@Query(value = "select count(teamIdWinner) from Game g where g.status like 'over' and g.teamIdWinner = ?1", nativeQuery = true)
     public int countWinsOfTeam(int teamId);*/
 
-    @Query("SELECT t FROM Team t ORDER BY numberWins + numberDraws +numberLoses DESC")
+    @Query("SELECT t FROM Team t ORDER BY numberWins + numberDraws + numberLoses DESC")
     public List<Team> listGamesOrdered();
 
     @Query("SELECT t FROM Team t ORDER BY numberWins DESC")
@@ -26,4 +27,7 @@ public interface TeamRepository extends CrudRepository<Team, Integer> {
     
     @Query("SELECT t FROM Team t ORDER BY numberLoses DESC")
     public List<Team> listLosesOrdered();
+
+    @Query("SELECT t.players FROM Team t where Max(t.players.goalsScored)")
+    public List<Player> listBestPlayers();
 }    

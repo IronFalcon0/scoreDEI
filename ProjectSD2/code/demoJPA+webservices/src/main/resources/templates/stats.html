@@ -13,13 +13,28 @@
             <tr>
                 <th>Team Name</th>
                 <th>Number of games</th>
-                <th>Name of the player with more goals</th>
             </tr>
             <tr th:each="team : ${teamsGames}">
                 
                 <td><text th:text="${team.name}">name</text></td>
                 <td><text th:text="${team.numberWins + team.numberLoses + team.numberDraws}">nGames</text></td>
             </tr>
+        </table>
+
+        <br>
+        <h3>Games</h3>
+        <table border="1">
+            <tr>
+                <th>Team Name</th>
+                <th>Best Player Name</th>
+                <th>Goals</th>
+            </tr>
+            <tr th:each="player : ${bestPlayers}">
+                <td><text th:text="${player.teamPlayer.name}">name</text></td>
+                
+                <td><text th:text="${player.name}">name</text></td>
+                <td><text th:text="${player.goalsScored}">nGoals</text></td>
+            </tr>>
         </table>
 
         <br>

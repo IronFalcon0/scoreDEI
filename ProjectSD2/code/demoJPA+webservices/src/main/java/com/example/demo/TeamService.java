@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.data.Player;
 import com.example.data.Team;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,10 @@ public class TeamService {
     
     public List<Team> listTeamsByLoses() {
         return teamRepository.listLosesOrdered();
+    }
+
+    public List<Player> listBestPlayers() {
+        return teamRepository.listBestPlayers();
     }
 
     /*public List<Team> findByNameEndsWith(String chars) {
