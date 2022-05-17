@@ -71,12 +71,13 @@ public class DataController {
         games[1].setTeams(teams[1], teams[2]);
 
         Player[] players = {
-            new Player("rod", "avançado", new Date(), teams[0]),
             new Player("tiago", "avançado", new Date(), teams[0]),
+            new Player("rod", "avançado", new Date(), teams[0]),
             new Player("sofia", "avançado", new Date(), teams[1])
         };
 
         players[0].setGoalsScored(players[0].getGoalsScored() + 1);
+        players[1].setGoalsScored(players[1].getGoalsScored() + 1);
 
         //event goal
         Event[] events = {

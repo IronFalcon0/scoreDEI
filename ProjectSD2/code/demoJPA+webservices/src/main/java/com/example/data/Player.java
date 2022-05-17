@@ -151,4 +151,8 @@ public class Player {
         return this.name + " (id = " + this.id + "). PlayerPosition: " + this.playerPosition;
     }
 
+    public String getTeamName() {
+        return teamPlayer.getName();
+    }
+
 }

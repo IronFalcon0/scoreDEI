@@ -22,7 +22,8 @@
         </table>
 
         <br>
-        <h3>Games</h3>
+        <h3>Best Players</h3>
+
         <table border="1">
             <tr>
                 <th>Team Name</th>
@@ -30,15 +31,15 @@
                 <th>Goals</th>
             </tr>
             <tr th:each="player : ${bestPlayers}">
-                <td><text th:text="${player.teamPlayer.name}">name</text></td>
+                <td><text th:text="${player.getTeamName()}">name</text></td>
                 
                 <td><text th:text="${player.name}">name</text></td>
                 <td><text th:text="${player.goalsScored}">nGoals</text></td>
-            </tr>>
+            </tr>
         </table>
 
         <br>
-        <h2>Wins</h2>
+        <h3>Wins</h3>
         <table border="1">
             <tr>
                 <th>Team Name</th>
@@ -52,7 +53,7 @@
         </table>
 
         <br>
-        <h2>Draws</h2>
+        <h3>Draws</h3>
         <table border="1">
             <tr>
                 <th>Team Name</th>
@@ -66,7 +67,7 @@
         </table>
 
         <br>
-        <h2>Loses</h2>
+        <h3>Loses</h3>
         <table border="1">
             <tr>
                 <th>Team Name</th>
