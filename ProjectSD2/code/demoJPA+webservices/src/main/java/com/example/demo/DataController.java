@@ -129,12 +129,23 @@ public class DataController {
         return "stats";
     }
 
-
-
     @GetMapping("/")
     public String redirect() {
         return "redirect:/homepage";
     }
+
+   @GetMapping("/gameInfo")
+    public String gameDetails(@RequestParam(name="id", required=true) int id, Model m) {
+        Optional<Game> op = this.gameService.getGame(id);
+        // get event list
+        if (op.isPresent()) {
+            m.addAttribute("game", op.get());
+            m.addAttribute("events", this.eventService.listEventsOfGame(id));
+            return "gameInfo";
+        }
+        return "redirect:/homepage";
+    }
+
 
     @GetMapping("/createData")
     public String createData() {
