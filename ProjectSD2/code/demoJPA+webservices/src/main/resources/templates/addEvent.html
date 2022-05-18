@@ -1,0 +1,49 @@
+<form th:action="@{/saveEvent}" th:object="${event}" method="post">
+    <div="form-row">
+        <div>
+            <input type="hidden" th:field="*{id}">
+        </div>
+        <h1>Add Event</h1>
+        <br>
+        <div>
+            <label>Select Game:</label>
+            <select id="*{game}">
+                <ul th:each="g : ${games}">
+                    <option value="${g}"> <text th:text="${g.teams[0].name}">name</text><text> vs </text><text th:text="${g.teams[1].name}">name</text> </option>
+                    
+                </ul>
+            </select>
+        </div>
+        <br>
+        <div>
+            <label>Event: </label>
+            <select id="*{content}">
+                <option value="Game started">Game started</option>
+                <option value="Game ended">Game ended</option>
+                <option value="Game stoped">Game stoped</option>
+                <option value="Game resumed">Game resumed</option>
+                <option value="Goal">Goal</option>
+                <option value="Yellow card">Yellow card</option>
+                <option value="Red card">Red card</option>
+            </select>
+        </div>
+        
+
+        <br>
+        <div>
+            <label>PLayer: </label>
+            <select id="*{player}">
+                <option value="${null}">Null</option>
+                <ul th:each="p : ${players}">
+                <option value="${p}"><text th:text="${p.name}">name</text></option>
+
+                </ul>
+            </select>
+            <br>
+            <text>Note: Only add if event = ("Goal", "Yellow card", "Red card")</text>
+        </div>
+
+
+        <button type="submit">Add Event</button>
+    </div>
+</form>

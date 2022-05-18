@@ -146,6 +146,22 @@ public class DataController {
         return "redirect:/homepage";
     }
 
+    @GetMapping("/addEvent")
+    public String addEvent(Model m) {
+        m.addAttribute("games", this.gameService.getAllGames());
+        m.addAttribute("players", this.playerService.getAllPlayers());
+        m.addAttribute("event", new Event());
+        return "addEvent";
+    }
+
+    @PostMapping("/saveEvent")
+    public String saveEvent(@ModelAttribute Event event) {
+        this.eventService.addEvent(event);
+        return "redirect:/homepage";
+    }
+
+
+
 
     @GetMapping("/createData")
     public String createData() {

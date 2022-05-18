@@ -37,7 +37,14 @@ public class Event {
     private Player playerEvent;
 
 
-    public Event() {
+    public Event() {}
+
+    public Event(String content) {
+        this.content = content;
+        this.eventTime = new Date();
+        this.game = new Game();
+        this.teamEvent = new Team();
+        this.playerEvent = new Player();
     }
 
     public Event(String content, Date eventTime) {
