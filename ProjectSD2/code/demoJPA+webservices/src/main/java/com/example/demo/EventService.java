@@ -29,10 +29,8 @@ public class EventService {
         return eventRepository.findById(id);
     }
 
-    /*
-     * public List<Event> findByNameEndsWith(String chars) {
-     * return eventRepository.findByNameEndsWith(chars);
-     * }
-     */
+    public List<Event> listEventsOfGame(int gameId) {
+        return eventRepository.listEventsOfGame(gameId);
+    }
 
 }

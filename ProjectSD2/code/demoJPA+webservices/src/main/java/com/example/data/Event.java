@@ -123,6 +123,20 @@ public class Event {
         this.playerEvent = player;
     }
 
+    public String getPlayerName() {
+        if (this.playerEvent == null) {
+            return "";
+        }
+        return this.playerEvent.getName();
+    }
+
+    public String getTeamName() {
+        if (this.teamEvent == null) {
+            return "";
+        }
+        return this.teamEvent.getName();
+    }
+
     public String toString() {
         return this.content + "(id = " + this.id + "). Content: " + this.content + ". EventTime: " + this.eventTime;
     }

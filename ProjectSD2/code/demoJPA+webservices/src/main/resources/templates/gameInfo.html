@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Game Info</title>
+        <meta charset="utf8"/>
+    </head>
+    <body>
+        <h1>Game Details</h1>
+
+        <h2><text th:text="${game.teams[0].name}">name</text><text> vs </text><text th:text="${game.teams[1].name}">name</text></h2>
+        <h3><text>Current result: </text><text th:text="${game.goalsTeam1}">team1goals</text> <text> - </text> <text th:text="${game.goalsTeam2}">team1goals</text></h3>
+        <br>
+        <p><text th:text="${game.getDateFormat()}">date</text></p>
+        <p><text>Current status: </text><text th:text="${game.gameState}">gameState</text></p>
+
+        <br>
+        <h3>Event List</h3>
+  
+        <table border="1">
+          <tr>
+            <th>Event</th>
+            <th>Team</th>
+            <th>Player</th>
+            <th>Time</th>
+            
+          </tr>
+          <tr th:each="ev : ${events}">
+            <td th:text="${ev.content}">content</td>
+            <td th:text="${ev.getPlayerName()}">content</td>
+            <td th:text="${ev.getTeamName()}">content</td>
+            <td th:text="${ev.eventTime}">eventTime</td>
+          </tr>
+        </table>
+      
+    </body>
+</html>

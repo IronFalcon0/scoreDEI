@@ -8,6 +8,6 @@ import java.util.List;
 import com.example.data.Event;
 
 public interface EventRepository extends CrudRepository<Event, Integer> {
-    // @Query("select s from Student s where s.name like %?1")
-    // public List<Event> findByNameEndsWith(String chars);
+    @Query("select ev from Event ev where ev.game.id = ?1")
+    public List<Event> listEventsOfGame(int gameId);
 }
