@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Team Details</title>
+        <meta charset="utf8"/>
+    </head>
+    <body>
+        <h1><text th:text="${team.name}">name</text></h1>
+        <br>
+
+        <table border="1">
+            <tr>
+                <th>Player Name</th>
+                <th>Player Position</th>
+                <th>Goals Scored</th>
+                <th>Yellow Cards</th>
+                <th>Red Cards</th>
+                <th>Birthdate</th>
+            </tr>
+            <tr th:each="p : ${players}">
+                
+                <td><text th:text="${p.name}">name</text></td>
+                <td><text th:text="${p.playerPosition}">playerPosition</text></td>
+                <td><text th:text="${p.goalsScored}">goalsScored</text></td>
+                <td><text th:text="${p.yellowCards}">yellowCards</text></td>
+                <td><text th:text="${p.redCards}">redCards</text></td>
+                <td><text th:text="${p.birthDate}">birthDate</text></td>
+            </tr>
+        </table>
+
+    </body>
+</html>
