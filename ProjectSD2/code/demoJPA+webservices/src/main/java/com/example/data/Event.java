@@ -50,17 +50,25 @@ public class Event {
     public Event(String content, Date eventTime) {
         this.content = content;
         this.eventTime = eventTime;
-        this.game = new Game();
-        this.teamEvent = new Team();
-        this.playerEvent = new Player();
+        this.game = null;
+        this.teamEvent = null;
+        this.playerEvent = null;
+    }
+
+    public Event(Date eventTime, Game game) {
+        this.content = "";
+        this.eventTime = eventTime;
+        this.game = game;
+        this.teamEvent = null;
+        this.playerEvent = null;
     }
 
     public Event(String content, Date eventTime, Game game) {
         this.content = content;
         this.eventTime = eventTime;
         this.game = game;
-        /*this.teamEvent = new Team();
-        this.playerEvent = new Player();*/
+        this.teamEvent = null;
+        this.playerEvent = null;
     }
 
     public Event(String content, Date eventTime, Game game, Team team) {
@@ -68,7 +76,7 @@ public class Event {
         this.eventTime = eventTime;
         this.game = game;
         this.teamEvent = team;
-        this.playerEvent = new Player();
+        this.playerEvent = null;
     }
 
     public Event(String content, Date eventTime, Game game, Team team, Player player) {
@@ -122,11 +130,11 @@ public class Event {
         this.teamEvent = team;
     }
 
-    public Player getPlayer() {
+    public Player getPlayerEvent() {
         return playerEvent;
     }
 
-    public void setPlayer(Player player) {
+    public void setPlayerEvent(Player player) {
         this.playerEvent = player;
     }
 
@@ -144,7 +152,7 @@ public class Event {
         return this.teamEvent.getName();
     }
 
-    public String toString() {
+    /*public String toString() {
         return this.content + "(id = " + this.id + "). Content: " + this.content + ". EventTime: " + this.eventTime;
-    }
+    }*/
 }

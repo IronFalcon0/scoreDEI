@@ -16,7 +16,7 @@
             </tr>
             <tr th:each="team : ${teamsGames}">
                 
-                <td><text th:text="${team.name}">name</text></td>
+                <td><a th:href="@{teamInfo(id=${team.id})}"><text th:text="${team.name}">name</text></a></td>
                 <td><text th:text="${team.numberWins + team.numberLoses + team.numberDraws}">nGames</text></td>
             </tr>
         </table>

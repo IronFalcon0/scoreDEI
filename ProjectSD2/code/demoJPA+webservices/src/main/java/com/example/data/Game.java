@@ -31,6 +31,7 @@ public class Game {
     private List<Team> teams; 
     private int goalsTeam1, goalsTeam2;
     private String gameState;
+    private Boolean isOver;
     private Boolean isTie;
 
     @OneToMany(mappedBy="game", cascade = CascadeType.ALL)
@@ -46,6 +47,7 @@ public class Game {
         goalsTeam2 = 0;
         this.gameState = new String();
         this.events = new ArrayList<>();
+        this.isOver = false;
     }
 
     public void appendEvent(Event event) {
@@ -115,6 +117,14 @@ public class Game {
 
     public void setIsTie(Boolean isTie) {
         this.isTie = isTie;
+    }
+
+    public Boolean getIsOver() {
+        return this.isOver;
+    }
+
+    public void setIsOver(Boolean isOver) {
+        this.isOver = isOver;
     }
 
     public String toString() {

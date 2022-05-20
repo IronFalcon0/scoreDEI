@@ -123,11 +123,11 @@ public class Player {
         this.goalsScored = goalsScored;
     }
 
-    public int getYellowCard() {
+    public int getYellowCards() {
         return yellowCards;
     }
 
-    public void setYellowCard(int yellowCards) {
+    public void setYellowCards(int yellowCards) {
         this.yellowCards = yellowCards;
     }
 

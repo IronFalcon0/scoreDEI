@@ -1,0 +1,28 @@
+<form th:action="@{/saveEvent}" th:object="${event}" method="post">
+    <div="form-row">
+        <div>
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{game}">
+            <input type="hidden" th:field="*{eventTime}">
+            
+        </div>
+        <h1>Change Status</h1>
+        <br>
+
+        <div>
+            <label>Set Status of game: </label>
+            <select th:field="*{content}" id="contentString">
+                <option value="Game started">Game Started</option>
+                <option value="Game ended">Game Ended</option>
+                <option value="Game stopped">Game Stopped</option>
+                <option value="Game resumed">Game Resumed</option>
+            </select>
+        </div>
+        <br>
+        
+
+
+
+        <button type="submit">Add Event</button>
+    </div>
+</form>

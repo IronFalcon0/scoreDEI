@@ -31,6 +31,10 @@
             <td th:text="${ev.eventTime}">eventTime</td>
           </tr>
         </table>
-      
+        <br>
+        <div th:switch="${game.isOver}">
+          <p th:case="false"><a th:href="@{/gameInfo/changeGameStatus(id=${game.id})}">Change Game Status</a><br>
+            <a th:href="@{/gameInfo/addEvent(id=${game.id})}">Other Event(Goals/Cards)</a></p>
+        </div>   
     </body>
 </html>
