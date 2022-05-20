@@ -165,7 +165,6 @@ public class DataController {
             List<Player> playersTeam2 = teams.get(1).getPlayers();
 
             playersTotal.addAll(playersTeam2);
-            System.out.println(playersTotal);
 
             m.addAttribute("game", g);
             m.addAttribute("players", playersTotal);
@@ -240,4 +239,22 @@ public class DataController {
             }
         }
     }
+
+
+    @GetMapping("/addUser")
+    public String addUser(Model m) {
+        User us = new User();
+        m.addAttribute("user", us);
+        return "addUser";
+    }
+
+    @PostMapping("/saveUser")
+    public String saveUser(@ModelAttribute User user, Model m) {
+        if (user.getName().isBlank() || user.getPassword().isBlank())
+            return "redirect:/addUser";
+
+        this.userService.addUser(user);
+        return "redirect:/homepage";
+    }
+
 }
