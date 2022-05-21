@@ -1,0 +1,50 @@
+<form th:action="@{/savePlayer}" th:object="${player}" method="post">
+    <div="form-row">
+        <div>
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{goalsScored}">
+            <input type="hidden" th:field="*{yellowCards}">
+            <input type="hidden" th:field="*{redCards}">
+            <input type="hidden" th:field="*{events}">
+
+        </div>
+        <h1>Add Player</h1>
+        <br>
+
+        <div>
+            <label>Player Name: </label>
+            <input type="text" th:field="*{name}" required>
+        </div>
+        <br>
+
+        <div>
+            <label>Player Birthday: </label>
+            <input type="datetime-local" th:field="*{birthDate}" required>
+        </div>
+        <br>
+
+        <div>
+            <label>Position: </label>
+            <select id="position" th:field="*{playerPosition}">
+                <option value="Guarda Redes">Guarda Redes</option>
+                <option value="Defesa">Defesa</option>
+                <option value="Médio">Médio</option>
+                <option value="Avançado">Avançado</option>
+            </select>
+        </div>
+        <br>
+
+        <div>
+            <label>Team:</label>
+                <select id="teams" th:field="*{teamPlayer}">
+                    <option th:each="t : ${teams}"
+                        th:value="${{t.id}}"
+                        th:text="${t.name}">
+                    </option>
+                </select>
+        </div>
+
+        <br>
+        <button type="submit">Add Player</button>
+    </div>
+</form>

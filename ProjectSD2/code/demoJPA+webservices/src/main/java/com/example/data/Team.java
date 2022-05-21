@@ -150,6 +150,10 @@ public class Team {
         this.games.add(game);
     }
 
+    public void addPlayer(Player player) {
+        this.players.add(player);
+    }
+
     public String toString() {
         return this.name + " id = " + this.id;
     }

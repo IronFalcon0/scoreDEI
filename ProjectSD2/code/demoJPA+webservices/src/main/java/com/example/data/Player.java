@@ -1,5 +1,7 @@
 package com.example.data;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +40,10 @@ public class Player {
      
 
     public Player() {
+        this.goalsScored = 0;
+        this.yellowCards = 0;
+        this.redCards = 0;
+        this.events = new ArrayList<>();
     }
 
     public Player(String name, String playerPosition, Date birthDate, Team team) {
@@ -108,11 +114,17 @@ public class Player {
     }
 
     public Date getBirthDate() {
-        return birthDate;
+        return this.birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+    public String getBirthDateFormat() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
+        return formatter.format(this.birthDate);
+    }
+
+    public void setBirthDate(String birthDate) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
+        this.birthDate = (Date)formatter.parse(birthDate);;
     }
 
     public int getGoalsScored() {
@@ -143,8 +155,12 @@ public class Player {
         this.name = name;
     }
 
-    public Team getTeam() {
+    public Team getTeamPlayer() {
         return teamPlayer;
+    }
+
+    public void setTeamPlayer(Team team) {
+        this.teamPlayer = team;
     }
 
     public String toString() {

@@ -223,7 +223,7 @@ public class DataController {
                 case "Goal":
                     event.getPlayerEvent().setGoalsScored(event.getPlayerEvent().getGoalsScored() + 1);
                     List<Team> ts = event.getGame().getTeams();
-                    Team t = event.getPlayerEvent().getTeam();
+                    Team t = event.getPlayerEvent().getTeamPlayer();
                     if (ts.get(0).getName().equals(t.getName())) {
                         event.getGame().setGoalsTeam1(event.getGame().getGoalsTeam1() + 1);
                         event.setTeam(ts.get(0));
@@ -320,5 +320,21 @@ public class DataController {
             return team.getImage();
         }
     }*/
+
+    @GetMapping("/addPlayer")
+    public String addPlayer(Model m) {
+        Player player = new Player();
+        m.addAttribute("player", player);
+        m.addAttribute("teams", this.teamService.getAllTeams());
+
+        return "addPlayer";
+    }
+
+    @PostMapping("/savePlayer")
+    public String savePlayer(@ModelAttribute Player player, Model m) {
+        this.playerService.addPlayer(player);
+        
+        return "redirect:/homepage";
+    }
 
 }
