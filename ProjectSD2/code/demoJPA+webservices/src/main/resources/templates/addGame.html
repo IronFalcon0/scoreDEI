@@ -1,0 +1,42 @@
+<form th:action="@{/saveGame}" th:object="${game}" method="post">
+    <div="form-row">
+        <div>
+            <input type="hidden" th:field="*{id}">
+
+        </div>
+        <h1>Add Game</h1>
+        <br>
+
+        <div>
+            <label>Game Date: </label>
+            <input type="datetime-local" th:field="*{date}">
+        </div>
+
+        <div>
+            <label>Place: </label>
+            <input type="text" th:field="*{place}">
+        </div>
+
+        <div>
+            <label>Team1:</label>
+                <select id="teams" th:field="*{teams}" >
+                    <option th:each="t : ${teamsAvailable}"
+                        th:value="${{t.id}}"
+                        th:text="${t.name}">
+                    </option>
+                </select>
+        </div>
+
+        <div>
+            <label>Team2:</label>
+                <select id="teams" th:field="*{teams}" >
+                    <option th:each="t : ${teamsAvailable}"
+                        th:value="${{t.id}}"
+                        th:text="${t.name}">
+                    </option>
+                </select>
+        </div>
+
+        <button type="submit">Add Game</button>
+    </div>
+</form>

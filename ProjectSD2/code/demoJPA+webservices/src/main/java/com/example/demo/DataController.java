@@ -2,6 +2,7 @@ package com.example.demo;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.example.data.Team;
@@ -62,8 +63,8 @@ public class DataController {
             new Team("porto", 1),
             new Team("sporting", 2)
         }; 
-        games[0].setTeams(teams[0], teams[1]);
-        games[1].setTeams(teams[1], teams[2]);
+        games[0].set2Teams(teams[0], teams[1]);
+        games[1].set2Teams(teams[1], teams[2]);
 
         Player[] players = {
             new Player("tiago", "avançado", new Date(), teams[0]),
@@ -240,7 +241,6 @@ public class DataController {
         }
     }
 
-
     @GetMapping("/addUser")
     public String addUser(Model m) {
         User us = new User();
@@ -254,6 +254,30 @@ public class DataController {
             return "redirect:/addUser";
 
         this.userService.addUser(user);
+        return "redirect:/homepage";
+    }
+
+    @GetMapping("/addGame")
+    public String addGame(Model m) {
+        Game game = new Game();
+        List<Team> teams = this.teamService.getAllTeams();
+        m.addAttribute("game", game);
+        m.addAttribute("teamsAvailable", teams);
+
+        return "addGame";
+    }
+
+    @PostMapping("/saveGame")
+    public String saveGame(@ModelAttribute Game game, Model m) {
+        System.out.println(game.getTeams());
+        System.out.println(game.getTeams().get(0));
+
+        game.getTeams().get(0).addGame(game);
+        game.getTeams().get(1).addGame(game);
+
+        // compare is both teams are equal
+
+        this.gameService.addGame(game);
         return "redirect:/homepage";
     }
 
