@@ -3,8 +3,6 @@ package com.example.demo;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.data.Professor;
-import com.example.data.Student;
 import com.example.data.Team;
 import com.example.data.Game;
 import com.example.data.User;
@@ -26,12 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("rest")
 public class RESTcontroller {
     @Autowired
-    ProfService profService;
-
-    @Autowired
-    StudentService studentService;
-
-    @Autowired
     GameService gameService;
     
     @Autowired
@@ -46,6 +38,7 @@ public class RESTcontroller {
     @Autowired
     PlayerService playerService;
 
+    /*
     @GetMapping(value = "professors", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Professor> getProfessors()
     {
@@ -106,5 +99,5 @@ public class RESTcontroller {
             s1.setTelephone(s.getTelephone());
             studentService.addStudent(op.get());
         }
-    }
+    }*/
 }

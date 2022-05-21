@@ -126,6 +126,10 @@ public class Team {
         return this.numberWins + this.numberDraws + this.numberLoses;
     }
 
+    public void addGame(Game game) {
+        this.games.add(game);
+    }
+
     public String toString() {
         return this.name + " id = " + this.id;
     }

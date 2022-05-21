@@ -2,8 +2,12 @@ package com.example.data;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 
 import javax.persistence.CascadeType;
@@ -25,7 +29,7 @@ public class Game {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String place;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private Date date;
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Team> teams; 
@@ -37,7 +41,13 @@ public class Game {
     @OneToMany(mappedBy="game", cascade = CascadeType.ALL)
     private List<Event> events;
 
-    public Game() {}
+    public Game() {
+        this.teams = new ArrayList<>();
+        this.goalsTeam1 = 0;
+        this.goalsTeam2 = 0;
+        this.gameState = "Game not started";
+        this.isOver = false;
+    }
 
     public Game(String place, Date date) {
         this.place = place;
@@ -75,12 +85,13 @@ public class Game {
     }
 
     public String getDateFormat() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        return dateFormat.format(this.date);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
+        return formatter.format(this.date);
     }
-    
-    public void setPlace(Date date) {
-        this.date = date;
+
+    public void setDate(String date) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
+        this.date = (Date)formatter.parse(date);
     }
 
     public List<Team> getTeams() {
@@ -139,7 +150,11 @@ public class Game {
         this.events = events;
     }
 
-    public void setTeams(Team team1, Team team2) {
+    public void setTeams(List<Team> team) {;
+        this.teams.addAll(team);
+    }
+
+    public void set2Teams(Team team1, Team team2) {
         this.teams.clear();
         this.teams.add(team1);
         this.teams.add(team2);
