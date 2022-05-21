@@ -222,14 +222,14 @@ public class DataController {
             switch (event.getContent()) {
                 case "Goal":
                     event.getPlayerEvent().setGoalsScored(event.getPlayerEvent().getGoalsScored() + 1);
-                    List<Team> ts = event.getGame().getTeams();
+                    Game game = event.getGame();
+                    List<Team> ts = game.getTeams();
                     Team t = event.getPlayerEvent().getTeamPlayer();
                     if (ts.get(0).getName().equals(t.getName())) {
-                        event.getGame().setGoalsTeam1(event.getGame().getGoalsTeam1() + 1);
-                        event.setTeam(ts.get(0));
+                        game.setGoalsTeam1(game.getGoalsTeam1() + 1);
+                        
                     } else if (ts.get(1).getName().equals(t.getName())) {
-                        event.getGame().setGoalsTeam2(event.getGame().getGoalsTeam2() + 1);
-                        event.setTeam(ts.get(1));
+                        game.setGoalsTeam2(game.getGoalsTeam2() + 1);
                     }
                     break;
 
@@ -242,9 +242,35 @@ public class DataController {
                     break;
             }
         } else  {       // game event
-            event.getGame().setGameState(event.getContent());
+            Game game = event.getGame();
+            game.setGameState(event.getContent());
             if (event.getContent().equals("Game ended")) {
+                // game is a draw
+                if(game.getGoalsTeam1() == game.getGoalsTeam2()) {
+                    game.setIsTie(true);
+                    List<Team> teams = game.getTeams();
+                    teams.get(0).setNumberDraws(teams.get(0).getNumberDraws() + 1);
+                    teams.get(1).setNumberDraws(teams.get(1).getNumberDraws() + 1);
+
+                } else if (game.getGoalsTeam1() > game.getGoalsTeam2()) {       // team 0 wins
+                    game.setIsTie(false);
+                    List<Team> teams = game.getTeams();
+                    teams.get(0).setNumberWins(teams.get(0).getNumberWins() + 1);
+                    teams.get(1).setNumberLoses(teams.get(1).getNumberLoses() + 1);
+
+                } else {                                                        // team 1 wins
+                    game.setIsTie(false);
+                    List<Team> teams = game.getTeams();
+                    teams.get(0).setNumberLoses(teams.get(0).getNumberLoses() + 1);
+                    teams.get(1).setNumberWins(teams.get(1).getNumberWins() + 1);
+                }
+                
                 event.getGame().setIsOver(true);
+            }
+            if (event.getContent().equals("Game stopped")) {
+                game.setIsPaused(true);
+            } else {
+                game.setIsPaused(false);
             }
         }
     }

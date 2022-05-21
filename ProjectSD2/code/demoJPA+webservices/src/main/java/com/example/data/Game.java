@@ -36,6 +36,7 @@ public class Game {
     private int goalsTeam1, goalsTeam2;
     private String gameState;
     private Boolean isOver;
+    private Boolean isPaused;
     private Boolean isTie;
 
     @OneToMany(mappedBy="game", cascade = CascadeType.ALL)
@@ -47,6 +48,7 @@ public class Game {
         this.goalsTeam2 = 0;
         this.gameState = "Game not started";
         this.isOver = false;
+        this.isPaused = true;
     }
 
     public Game(String place, Date date) {
@@ -58,6 +60,7 @@ public class Game {
         this.gameState = new String();
         this.events = new ArrayList<>();
         this.isOver = false;
+        this.isPaused = true;
     }
 
     public void appendEvent(Event event) {
@@ -136,6 +139,14 @@ public class Game {
 
     public void setIsOver(Boolean isOver) {
         this.isOver = isOver;
+    }
+
+    public Boolean getIsPaused() {
+        return this.isPaused;
+    }
+
+    public void setIsPaused(Boolean isPaused) {
+        this.isPaused = isPaused;
     }
 
     public String toString() {
