@@ -2,12 +2,14 @@ package com.example.data;
 
 import java.util.List;
 import java.util.ArrayList;
+//import java.awt.Image;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -20,7 +22,7 @@ public class Team {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
-    private int image;
+    private byte[] image;
     @ManyToMany(mappedBy="teams", cascade = CascadeType.ALL)
     private List<Game> games;
     private int numberWins;
@@ -33,9 +35,27 @@ public class Team {
     @OneToMany(mappedBy="teamEvent", cascade = CascadeType.ALL)
     private List<Event> events;
 
-    public Team() {}
+    public Team() {
+        this.name = "";
+        this.games = new ArrayList<>();
+        this.players = new ArrayList<>();
+        this.events = new ArrayList<>();
+        this.numberWins = 0;
+        this.numberLoses = 0;
+        this.numberDraws = 0;
+    }
 
-    public Team(String name, int image) {
+    public Team(String name) {
+        this.name = name;
+        this.games = new ArrayList<>();
+        this.players = new ArrayList<>();
+        this.events = new ArrayList<>();
+        this.numberWins = 0;
+        this.numberLoses = 0;
+        this.numberDraws = 0;
+    }
+
+    public Team(String name, byte[] image) {
         this.name = name;
         this.image = image;
         this.games = new ArrayList<>();
@@ -114,11 +134,11 @@ public class Team {
         this.name = name;
     }
 
-    public int getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
@@ -128,6 +148,10 @@ public class Team {
 
     public void addGame(Game game) {
         this.games.add(game);
+    }
+
+    public void addPlayer(Player player) {
+        this.players.add(player);
     }
 
     public String toString() {

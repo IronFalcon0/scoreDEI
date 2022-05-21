@@ -1,0 +1,26 @@
+<form th:action="@{/saveTeam}" th:object="${team}" method="post">
+    <div="form-row">
+        <div>
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{games}">
+            <input type="hidden" th:field="*{numberWins}">
+            <input type="hidden" th:field="*{numberLoses}">
+            <input type="hidden" th:field="*{numberDraws}">
+
+        </div>
+        <h1>Add Team</h1>
+        <br>
+
+        <div>
+            <label>Team Name: </label>
+            <input type="text" th:field="*{name}" required>
+        </div>
+
+        <div>
+            <input type="file" th:field="*{image}" id="avatar" name="avatar" accept="image/png, image/jpeg">
+        </div>
+
+        <br>
+        <button type="submit">Add Team</button>
+    </div>
+</form>

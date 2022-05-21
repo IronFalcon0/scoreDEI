@@ -2,6 +2,12 @@ package com.example.demo;
 
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -12,11 +18,13 @@ import com.example.data.Event;
 import com.example.data.Player;
 import com.example.formdata.FormData;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -59,9 +67,9 @@ public class DataController {
             new Game("lisboa", new Date())
         };
         Team[] teams = {
-            new Team("benfica", 0),
-            new Team("porto", 1),
-            new Team("sporting", 2)
+            new Team("benfica"),
+            new Team("porto"),
+            new Team("sporting")
         }; 
         games[0].set2Teams(teams[0], teams[1]);
         games[1].set2Teams(teams[1], teams[2]);
@@ -214,14 +222,14 @@ public class DataController {
             switch (event.getContent()) {
                 case "Goal":
                     event.getPlayerEvent().setGoalsScored(event.getPlayerEvent().getGoalsScored() + 1);
-                    List<Team> ts = event.getGame().getTeams();
-                    Team t = event.getPlayerEvent().getTeam();
+                    Game game = event.getGame();
+                    List<Team> ts = game.getTeams();
+                    Team t = event.getPlayerEvent().getTeamPlayer();
                     if (ts.get(0).getName().equals(t.getName())) {
-                        event.getGame().setGoalsTeam1(event.getGame().getGoalsTeam1() + 1);
-                        event.setTeam(ts.get(0));
+                        game.setGoalsTeam1(game.getGoalsTeam1() + 1);
+                        
                     } else if (ts.get(1).getName().equals(t.getName())) {
-                        event.getGame().setGoalsTeam2(event.getGame().getGoalsTeam2() + 1);
-                        event.setTeam(ts.get(1));
+                        game.setGoalsTeam2(game.getGoalsTeam2() + 1);
                     }
                     break;
 
@@ -234,9 +242,35 @@ public class DataController {
                     break;
             }
         } else  {       // game event
-            event.getGame().setGameState(event.getContent());
+            Game game = event.getGame();
+            game.setGameState(event.getContent());
             if (event.getContent().equals("Game ended")) {
+                // game is a draw
+                if(game.getGoalsTeam1() == game.getGoalsTeam2()) {
+                    game.setIsTie(true);
+                    List<Team> teams = game.getTeams();
+                    teams.get(0).setNumberDraws(teams.get(0).getNumberDraws() + 1);
+                    teams.get(1).setNumberDraws(teams.get(1).getNumberDraws() + 1);
+
+                } else if (game.getGoalsTeam1() > game.getGoalsTeam2()) {       // team 0 wins
+                    game.setIsTie(false);
+                    List<Team> teams = game.getTeams();
+                    teams.get(0).setNumberWins(teams.get(0).getNumberWins() + 1);
+                    teams.get(1).setNumberLoses(teams.get(1).getNumberLoses() + 1);
+
+                } else {                                                        // team 1 wins
+                    game.setIsTie(false);
+                    List<Team> teams = game.getTeams();
+                    teams.get(0).setNumberLoses(teams.get(0).getNumberLoses() + 1);
+                    teams.get(1).setNumberWins(teams.get(1).getNumberWins() + 1);
+                }
+                
                 event.getGame().setIsOver(true);
+            }
+            if (event.getContent().equals("Game stopped")) {
+                game.setIsPaused(true);
+            } else {
+                game.setIsPaused(false);
             }
         }
     }
@@ -277,6 +311,54 @@ public class DataController {
             this.gameService.addGame(game);
         }
 
+        
+        return "redirect:/homepage";
+    }
+
+    @GetMapping("/addTeam")
+    public String addTeam(Model m) {
+        Team team = new Team();
+        m.addAttribute("team", team);
+
+        return "addTeam";
+    }
+
+    @PostMapping("/saveTeam")
+    public String saveTeam(@ModelAttribute Team team, Model m) {
+        System.out.println(team.getImage());
+        this.teamService.addTeam(team);
+        
+        return "redirect:/homepage";
+    }
+
+    /*@GetMapping("/getImage/{id}")
+    public byte[] showProductImage(@ModelAttribute int id) {
+        //response.setContentType("image/png"); // Or whatever format you wanna use
+        System.out.println("here");
+        System.out.println(id);
+        Optional<Team> op = this.teamService.getTeam(id);
+        if (op.isPresent()) {
+            Team team = op.get();
+            InputStream is = new ByteArrayInputStream(team.getImage());
+            System.out.println(team.getImage());
+            IOUtils.copy(is, response.getOutputStream());
+
+            return team.getImage();
+        }
+    }*/
+
+    @GetMapping("/addPlayer")
+    public String addPlayer(Model m) {
+        Player player = new Player();
+        m.addAttribute("player", player);
+        m.addAttribute("teams", this.teamService.getAllTeams());
+
+        return "addPlayer";
+    }
+
+    @PostMapping("/savePlayer")
+    public String savePlayer(@ModelAttribute Player player, Model m) {
+        this.playerService.addPlayer(player);
         
         return "redirect:/homepage";
     }

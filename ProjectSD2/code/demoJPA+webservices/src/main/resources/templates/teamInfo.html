@@ -7,6 +7,9 @@
     <body>
         <h1><text th:text="${team.name}">name</text></h1>
         <br>
+        <div>
+            <img id="teamLogo" th:text="${team.image}">
+        </div>
 
         <table border="1">
             <tr>
@@ -27,6 +30,9 @@
                 <td><text th:text="${p.birthDate}">birthDate</text></td>
             </tr>
         </table>
+
+        <br>
+        <a th:href="@{/homepage}">Homepage</a>
 
     </body>
 </html>
