@@ -2,6 +2,12 @@ package com.example.demo;
 
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -12,11 +18,13 @@ import com.example.data.Event;
 import com.example.data.Player;
 import com.example.formdata.FormData;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -59,9 +67,9 @@ public class DataController {
             new Game("lisboa", new Date())
         };
         Team[] teams = {
-            new Team("benfica", 0),
-            new Team("porto", 1),
-            new Team("sporting", 2)
+            new Team("benfica"),
+            new Team("porto"),
+            new Team("sporting")
         }; 
         games[0].set2Teams(teams[0], teams[1]);
         games[1].set2Teams(teams[1], teams[2]);
@@ -280,5 +288,37 @@ public class DataController {
         
         return "redirect:/homepage";
     }
+
+    @GetMapping("/addTeam")
+    public String addTeam(Model m) {
+        Team team = new Team();
+        m.addAttribute("team", team);
+
+        return "addTeam";
+    }
+
+    @PostMapping("/saveTeam")
+    public String saveTeam(@ModelAttribute Team team, Model m) {
+        System.out.println(team.getImage());
+        this.teamService.addTeam(team);
+        
+        return "redirect:/homepage";
+    }
+
+    /*@GetMapping("/getImage/{id}")
+    public byte[] showProductImage(@ModelAttribute int id) {
+        //response.setContentType("image/png"); // Or whatever format you wanna use
+        System.out.println("here");
+        System.out.println(id);
+        Optional<Team> op = this.teamService.getTeam(id);
+        if (op.isPresent()) {
+            Team team = op.get();
+            InputStream is = new ByteArrayInputStream(team.getImage());
+            System.out.println(team.getImage());
+            IOUtils.copy(is, response.getOutputStream());
+
+            return team.getImage();
+        }
+    }*/
 
 }
