@@ -269,15 +269,15 @@ public class DataController {
 
     @PostMapping("/saveGame")
     public String saveGame(@ModelAttribute Game game, Model m) {
-        System.out.println(game.getTeams());
-        System.out.println(game.getTeams().get(0));
+        List<Team> teams = game.getTeams();
+        if (teams.get(0).getId() != teams.get(1).getId()) {
+            game.getTeams().get(0).addGame(game);
+            game.getTeams().get(1).addGame(game);
 
-        game.getTeams().get(0).addGame(game);
-        game.getTeams().get(1).addGame(game);
+            this.gameService.addGame(game);
+        }
 
-        // compare is both teams are equal
-
-        this.gameService.addGame(game);
+        
         return "redirect:/homepage";
     }
 

@@ -85,11 +85,11 @@ public class Game {
     }
 
     public String getDateFormat() {
-        return this.date.toString();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
+        return formatter.format(this.date);
     }
 
     public void setDate(String date) throws ParseException {
-        System.out.println(date);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
         this.date = (Date)formatter.parse(date);
     }

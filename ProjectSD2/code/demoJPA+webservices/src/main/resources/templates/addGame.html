@@ -9,12 +9,12 @@
 
         <div>
             <label>Game Date: </label>
-            <input type="datetime-local" th:field="*{date}">
+            <input type="datetime-local" th:field="*{date}" required>
         </div>
 
         <div>
             <label>Place: </label>
-            <input type="text" th:field="*{place}">
+            <input type="text" th:field="*{place}" required>
         </div>
 
         <div>
@@ -36,7 +36,7 @@
                     </option>
                 </select>
         </div>
-
+        <br>
         <button type="submit">Add Game</button>
     </div>
 </form>
