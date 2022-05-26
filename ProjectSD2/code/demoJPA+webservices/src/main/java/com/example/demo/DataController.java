@@ -22,6 +22,7 @@ import com.example.formdata.FormData;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -175,6 +176,9 @@ public class DataController {
         if (adminUser == null) {
             Role adminRole = this.roleService.getRoleByName("ADMIN");
             User admin = new User("admin", "admin", adminRole);
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(admin.getPassword());
+            admin.setPassword(encodedPassword);
 
             this.userService.addUser(admin);
 
@@ -182,6 +186,17 @@ public class DataController {
 
 
 
+        return "redirect:/homepage";
+    }
+
+    @PostMapping("/process_register")
+    public String processRegister(User user) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        
+        this.userService.addUser(user);
+        
         return "redirect:/homepage";
     }
 
