@@ -3,6 +3,7 @@ package com.example.demo;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.ByteArrayInputStream;
@@ -14,6 +15,7 @@ import java.util.Date;
 import com.example.data.Team;
 import com.example.data.Game;
 import com.example.data.User;
+import com.example.data.Role;
 import com.example.data.Event;
 import com.example.data.Player;
 import com.example.formdata.FormData;
@@ -52,6 +54,9 @@ public class DataController {
 
     @Autowired
     PlayerService playerService;
+
+    @Autowired
+    RoleService roleService;
 
 
     @GetMapping("/getData")
@@ -148,6 +153,35 @@ public class DataController {
 
     @GetMapping("/")
     public String redirect() {
+        Boolean addUser = true;
+        Boolean addAdmin = true;
+
+        List<Role> roles = this.roleService.getAllRoles();
+        for(Role rol: roles) {
+            if(rol.getName().equals("USER"))
+                addUser = false;
+            if(rol.getName().equals("ADMIN"))
+                addAdmin = false;
+        }
+        if(addUser) {
+            this.roleService.addRole(new Role("USER"));
+        }
+        if(addAdmin) {
+            this.roleService.addRole(new Role("ADMIN"));
+        }
+
+        User adminUser = this.userService.getUserByName("admin");
+
+        if (adminUser == null) {
+            Role adminRole = this.roleService.getRoleByName("ADMIN");
+            User admin = new User("admin", "admin", adminRole);
+
+            this.userService.addUser(admin);
+
+        }
+
+
+
         return "redirect:/homepage";
     }
 
@@ -284,7 +318,7 @@ public class DataController {
 
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute User user, Model m) {
-        if (user.getName().isBlank() || user.getPassword().isBlank())
+        if (user.getUsername().isBlank() || user.getPassword().isBlank())
             return "redirect:/addUser";
 
         this.userService.addUser(user);
