@@ -189,15 +189,13 @@ public class DataController {
         return "redirect:/homepage";
     }
 
-    @PostMapping("/process_register")
-    public String processRegister(User user) {
+    
+    public User encodePassword(User user) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         
-        this.userService.addUser(user);
-        
-        return "redirect:/homepage";
+        return user;
     }
 
     @GetMapping("/gameInfo")
@@ -328,6 +326,7 @@ public class DataController {
     public String addUser(Model m) {
         User us = new User();
         m.addAttribute("user", us);
+        m.addAttribute("roles", this.roleService.getAllRoles());
         return "addUser";
     }
 
@@ -335,6 +334,8 @@ public class DataController {
     public String saveUser(@ModelAttribute User user, Model m) {
         if (user.getUsername().isBlank() || user.getPassword().isBlank())
             return "redirect:/addUser";
+
+        user = this.encodePassword(user);
 
         this.userService.addUser(user);
         return "redirect:/homepage";
@@ -409,6 +410,16 @@ public class DataController {
     public String savePlayer(@ModelAttribute Player player, Model m) {
         this.playerService.addPlayer(player);
         
+        return "redirect:/homepage";
+    }
+
+    @PostMapping("/logout")
+    public String logout(Model m) {
+        return "redirect:/homepage";
+    }
+
+    @PostMapping("/login")
+    public String login(Model m) {
         return "redirect:/homepage";
     }
 

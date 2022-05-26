@@ -32,7 +32,6 @@ public class UserService {
     }
 
     public User getUserByName(String name) {
-        System.out.println(name);
         return userRepository.getUserByUsername(name);
     }
 

@@ -25,7 +25,6 @@ public class User {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String username, password, email, phone;
-    private Boolean admin;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
@@ -35,7 +34,9 @@ public class User {
     private Set<Role> roles = new HashSet<>();
     private Boolean enabled;
 
-    public User() {}
+    public User() {
+        this.enabled = true;
+    }
 
     public User(String username, String password, Role role) {
         this.username = username;
@@ -46,12 +47,12 @@ public class User {
         this.enabled = true;
     }
 
-    public User(String username, String password, String email, String phone, Boolean isAdmin) {
+    public User(String username, String password, String email, String phone) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.phone = phone;
-        admin = isAdmin;
+        this.enabled = true;
     }
 
     public int getId() {
@@ -94,23 +95,20 @@ public class User {
         this.phone = phone;
     }
 
-    public Boolean getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Boolean admin) {
-        this.admin = admin;
-    }
 
     public Set<Role> getRoles() {
         return this.roles;
     }
 
     public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+        this.roles.addAll(roles);
     }
 
     public Boolean isEnabled() {
+        return enabled;
+    }
+
+    public Boolean getEnabled() {
         return enabled;
     }
 
@@ -119,7 +117,7 @@ public class User {
     }
 
     public String toString() {
-        return "user " + this.id + ": (username = " + this.username + ", password = " + this.password + "), email = " + this.email + ", phone = " + this.phone + ", is Admin = " + this.admin;
+        return "user " + this.id + ": (username = " + this.username + ", password = " + this.password + "), email = " + this.email + ", phone = " + this.phone;
     }
     
 }
