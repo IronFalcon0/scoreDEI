@@ -117,6 +117,11 @@ public class Player {
         return this.birthDate;
     }
 
+    public String getBirthDateShortFormat() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        return formatter.format(this.birthDate);
+    }
+
     public String getBirthDateFormat() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
         return formatter.format(this.birthDate);

@@ -316,6 +316,19 @@ public class DataController {
 
         }
 
+        User normalUser = this.userService.getUserByName("user");
+
+        if (normalUser == null) {
+            Role userRole = this.roleService.getRoleByName("USER");
+            User user = new User("user", "user", userRole);
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPassword);
+
+            this.userService.addUser(user);
+
+        }
+
 
 
         return "redirect:/homepage";
@@ -505,29 +518,11 @@ public class DataController {
 
     @PostMapping("/saveTeam")
     public String saveTeam(@ModelAttribute Team team, Model m) {
-        System.out.println(team.getImage());
+        System.out.println(team.getImagePath());
         this.teamService.addTeam(team);
 
         return "redirect:/homepage";
     }
-
-    /*
-     * @GetMapping("/getImage/{id}")
-     * public byte[] showProductImage(@ModelAttribute int id) {
-     * //response.setContentType("image/png"); // Or whatever format you wanna use
-     * System.out.println("here");
-     * System.out.println(id);
-     * Optional<Team> op = this.teamService.getTeam(id);
-     * if (op.isPresent()) {
-     * Team team = op.get();
-     * InputStream is = new ByteArrayInputStream(team.getImage());
-     * System.out.println(team.getImage());
-     * IOUtils.copy(is, response.getOutputStream());
-     * 
-     * return team.getImage();
-     * }
-     * }
-     */
 
     @GetMapping("/addPlayer")
     public String addPlayer(Model m) {

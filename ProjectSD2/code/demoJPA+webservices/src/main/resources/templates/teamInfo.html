@@ -8,7 +8,7 @@
         <h1><text th:text="${team.name}">name</text></h1>
         <br>
         <div>
-            <img id="teamLogo" th:text="${team.image}">
+            <img th:src="${team.imagePath}">
         </div>
 
         <table border="1">
@@ -27,7 +27,7 @@
                 <td><text th:text="${p.goalsScored}">goalsScored</text></td>
                 <td><text th:text="${p.yellowCards}">yellowCards</text></td>
                 <td><text th:text="${p.redCards}">redCards</text></td>
-                <td><text th:text="${p.birthDate}">birthDate</text></td>
+                <td><text th:text="${p.getBirthDateShortFormat()}">birthDate</text></td>
             </tr>
         </table>
 

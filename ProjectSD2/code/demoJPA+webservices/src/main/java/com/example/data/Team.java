@@ -135,11 +135,11 @@ public class Team {
         this.name = name;
     }
 
-    public String getImage() {
+    public String getImagePath() {
         return imagePath;
     }
 
-    public void setImage(String imagePath) {
+    public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
 
