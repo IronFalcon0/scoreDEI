@@ -8,7 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.http.HttpResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import com.example.data.Team;
@@ -17,6 +22,8 @@ import com.example.data.User;
 import com.example.data.Event;
 import com.example.data.Player;
 import com.example.formdata.FormData;
+import com.fasterxml.classmate.GenericType;
+import com.google.gson.JsonObject;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +41,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import ch.qos.logback.core.html.NOPThrowableRenderer;
-
+import kong.unirest.Unirest;
+import kong.unirest.json.JSONArray;
+import kong.unirest.json.JSONException;
+import kong.unirest.json.JSONObject;
 
 @Controller
 public class DataController {
     @Autowired
     GameService gameService;
-    
+
     @Autowired
     TeamService teamService;
 
@@ -53,56 +63,144 @@ public class DataController {
     @Autowired
     PlayerService playerService;
 
+    int numTeams = 3;
+    int numGames = 5;
+    int numPlayers = 6;
+    String apiKey = "25e4028474ad234869fcfe1da360a9ab";
 
     @GetMapping("/getData")
     public String getData() {
         return "getData";
     }
 
-   // @RequestMapping(value = "/getData", method = { RequestMethod.GET, RequestMethod.POST })
+    // @RequestMapping(value = "/getData", method = { RequestMethod.GET,
+    // RequestMethod.POST })
+
+    @PostMapping("/createData1")
+    public String getData1(Model model) {
+        return "redirect:/homepage";
+    }
+
+    void generateTeams(JSONArray response) {
+
+        for (int i = 0; i < response.length(); i++) {
+            var team = response.getJSONObject(i).getJSONObject("team");
+            Team newTeam = new Team(team.getString("name"), team.getString("logo"));
+            // Team newTeam = new Team(team.getString("name"));
+            int teamId = team.getInt("id");
+            // System.out.println("Team id: " + teamId);
+
+            newTeam.setId(teamId);
+            // System.out.println("This team id is " + newTeam.getId());
+            newTeam.setNumberWins((int) (Math.random() * 19));
+            newTeam.setNumberLoses((int) (Math.random() * 19));
+            newTeam.setNumberLoses((int) (Math.random() * 19));
+
+            this.teamService.addTeam(newTeam);
+            if (i == numTeams - 1)
+                break;
+        }
+    }
+
+    void generateGames() {
+        var teams = teamService.getAllTeams(); // [t1,t2,...]
+        // System.out.println("buscou teams");
+        String[] places = { "Lisboa", "Coimbra", "Porto", "Leira", "Braga" };
+        String[] gameStates = { "Game ended", "Game stopped" };
+
+        for (int i = 0; i < numGames; i++) {
+            int indexTeam1 = (int) (Math.random() * numTeams) % numTeams;
+            int indexTeam2;
+            do {
+                indexTeam2 = (int) (Math.random() * numTeams) % numTeams;
+            } while (indexTeam2 == indexTeam1);
+
+            int indexPlace = (int) (Math.random() * 5) % 5; // o % é só para ter a certeza que n vai out of bounds
+            int numGoalsTeam1 = (int) (Math.random() * 4) % 4;
+            int numGoalsTeam2 = (int) (Math.random() * 4) % 4;
+            int indexState = (int) (Math.random() * 2) % 2;
+
+            Game game = new Game(places[indexPlace], new Date());
+            game.set2Teams(teams.get(indexTeam1), teams.get(indexTeam2));
+            game.setGoalsTeam1(numGoalsTeam1);
+            game.setGoalsTeam2(numGoalsTeam2);
+            game.setGameState(gameStates[indexState]);
+            this.gameService.addGame(game);
+        }
+
+    }
+
+    void generatePlayers() throws JSONException, ParseException {
+        List<Team> teams = teamService.getAllTeams();
+
+        for (int i = 0; i < teams.size(); i++) {
+            int id = teams.get(i).getId();
+            Integer goals = 0, yellowCards = 0, redCards = 0;
+            JSONArray responsePlayers = Unirest
+                    .get("https://v3.football.api-sports.io/players?league=39&season=2018&team=" + id)
+                    .header("x-rapidapi-key", apiKey)
+                    .header("x-rapidapi-host", "v3.football.api-sports.io").asJson()
+                    .getBody()
+                    .getObject().getJSONArray("response");
+
+            for (int j = 0; j < responsePlayers.length(); j++) {
+
+                var player = responsePlayers.getJSONObject(j).getJSONObject("player");
+                var stats = responsePlayers.getJSONObject(j).getJSONArray("statistics");
+
+                // int goals = stats.getJSONObject(0).getJSONObject("goals").getInt("total");
+                // System.out.println("Stats size: " + stats.length() + " | " +
+                // stats.getJSONObject(0).length() + " |");
+                JSONObject cards = stats.getJSONObject(0).getJSONObject("cards");
+
+                yellowCards = stats.getJSONObject(0).getJSONObject("cards").optInt("yellow");
+                redCards = stats.getJSONObject(0).getJSONObject("cards").optInt("red");
+                goals = stats.getJSONObject(0).getJSONObject("goals").optInt("total");
+
+                String position = stats.getJSONObject(0).getJSONObject("games").getString("position");
+
+                Player newPlayer = new Player(player.getString("name"), position,
+                        new SimpleDateFormat("yyyy-MM-dd").parse(player.getJSONObject("birth").getString("date")),
+                        goals, yellowCards, redCards,
+                        teams.get(i));
+
+                this.playerService.addPlayer(newPlayer);
+                if (j == numPlayers - 1)
+                    break;
+            }
+        }
+
+    }
+
     @PostMapping("/createData")
-    public String getData(Model model) {
-        Game[] games = {
-            new Game("lisboa", new Date()),
-            new Game("lisboa", new Date())
-        };
-        Team[] teams = {
-            new Team("benfica"),
-            new Team("porto"),
-            new Team("sporting")
-        }; 
-        games[0].set2Teams(teams[0], teams[1]);
-        games[1].set2Teams(teams[1], teams[2]);
+    public String getData(Model model) throws JSONException, ParseException {
 
-        Player[] players = {
-            new Player("tiago", "avançado", new Date(), teams[0]),
-            new Player("rod", "avançado", new Date(), teams[0]),
-            new Player("sofia", "avançado", new Date(), teams[1])
-        };
+        JSONArray responseTeams = Unirest
+                .get("https://v3.football.api-sports.io/teams?league=39&season=2018")
+                .header("x-rapidapi-key", apiKey)
+                .header("x-rapidapi-host", "v3.football.api-sports.io").asJson()
+                .getBody()
+                .getObject().getJSONArray("response");
 
-        players[0].setGoalsScored(players[0].getGoalsScored() + 1);
-        players[1].setGoalsScored(players[1].getGoalsScored() + 1);
+        // Retirar da API informção (nome) de 20 equipas
+        // To Do: retirar imagens
+        generateTeams(responseTeams);
 
-        //event goal
+        generateGames();
+
+        generatePlayers();
+
+        // System.out.println("gerou players");
+
+        var teams = teamService.getAllTeams();
+        var games = gameService.getAllGames();
+        var players = playerService.getAllPlayers();
+
+        // event goal
         Event[] events = {
-            new Event("goal", new Date(), games[0], teams[0], players[0]),
-            new Event("Game Ended", new Date(), games[0])
+                new Event("goal", new Date(), games.get(0), teams.get(0), players.get(0)),
+                new Event("Game Ended", new Date(), games.get(0))
         };
-        games[0].setGoalsTeam1(games[0].getGoalsTeam1() + 1);
-        games[0].setGameState("Game Ended");
-        teams[0].setNumberWins(teams[0].getNumberWins() + 1);
-        teams[1].setNumberLoses(teams[1].getNumberLoses() + 1);
-
-        
-        
-        for (Team t: teams) 
-            this.teamService.addTeam(t);
-
-        for (Game g : games)
-            this.gameService.addGame(g);
-
-        for (Player p : players)
-            this.playerService.addPlayer(p);
 
         for (Event ev : events)
             this.eventService.addEvent(ev);
@@ -134,7 +232,7 @@ public class DataController {
     }
 
     @GetMapping("/teamInfo")
-    public String teamInfo(@RequestParam(name="id", required=true) int id, Model m) {
+    public String teamInfo(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Team> op = this.teamService.getTeam(id);
         // get player list
         if (op.isPresent()) {
@@ -145,14 +243,13 @@ public class DataController {
         return "redirect:/homepage";
     }
 
-
     @GetMapping("/")
     public String redirect() {
         return "redirect:/homepage";
     }
 
     @GetMapping("/gameInfo")
-    public String gameDetails(@RequestParam(name="id", required=true) int id, Model m) {
+    public String gameDetails(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Game> op = this.gameService.getGame(id);
         // get event list
         if (op.isPresent()) {
@@ -164,7 +261,7 @@ public class DataController {
     }
 
     @GetMapping("/gameInfo/addEvent")
-    public String addEvent(@RequestParam(name="id", required=true) int id, Model m) {
+    public String addEvent(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Game> op = this.gameService.getGame(id);
         if (op.isPresent()) {
             Game g = op.get();
@@ -184,11 +281,10 @@ public class DataController {
             return "redirect:/homepage";
         }
 
-        
     }
 
     @GetMapping("/gameInfo/changeGameStatus")
-    public String changeGameStatus(@RequestParam(name="id", required=true) int id, Model m) {
+    public String changeGameStatus(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Game> op = this.gameService.getGame(id);
         if (op.isPresent()) {
             Game g = op.get();
@@ -209,7 +305,7 @@ public class DataController {
         int gameId = event.getGame().getId();
         redirectAttributes.addAttribute("id", gameId);
 
-        if (!event.getGame().getIsOver()) {            
+        if (!event.getGame().getIsOver()) {
             this.connectEvent(event);
             this.eventService.addEvent(event);
         }
@@ -227,7 +323,7 @@ public class DataController {
                     Team t = event.getPlayerEvent().getTeamPlayer();
                     if (ts.get(0).getName().equals(t.getName())) {
                         game.setGoalsTeam1(game.getGoalsTeam1() + 1);
-                        
+
                     } else if (ts.get(1).getName().equals(t.getName())) {
                         game.setGoalsTeam2(game.getGoalsTeam2() + 1);
                     }
@@ -241,30 +337,30 @@ public class DataController {
                     event.getPlayerEvent().setRedCards(event.getPlayerEvent().getRedCards() + 1);
                     break;
             }
-        } else  {       // game event
+        } else { // game event
             Game game = event.getGame();
             game.setGameState(event.getContent());
             if (event.getContent().equals("Game ended")) {
                 // game is a draw
-                if(game.getGoalsTeam1() == game.getGoalsTeam2()) {
+                if (game.getGoalsTeam1() == game.getGoalsTeam2()) {
                     game.setIsTie(true);
                     List<Team> teams = game.getTeams();
                     teams.get(0).setNumberDraws(teams.get(0).getNumberDraws() + 1);
                     teams.get(1).setNumberDraws(teams.get(1).getNumberDraws() + 1);
 
-                } else if (game.getGoalsTeam1() > game.getGoalsTeam2()) {       // team 0 wins
+                } else if (game.getGoalsTeam1() > game.getGoalsTeam2()) { // team 0 wins
                     game.setIsTie(false);
                     List<Team> teams = game.getTeams();
                     teams.get(0).setNumberWins(teams.get(0).getNumberWins() + 1);
                     teams.get(1).setNumberLoses(teams.get(1).getNumberLoses() + 1);
 
-                } else {                                                        // team 1 wins
+                } else { // team 1 wins
                     game.setIsTie(false);
                     List<Team> teams = game.getTeams();
                     teams.get(0).setNumberLoses(teams.get(0).getNumberLoses() + 1);
                     teams.get(1).setNumberWins(teams.get(1).getNumberWins() + 1);
                 }
-                
+
                 event.getGame().setIsOver(true);
             }
             if (event.getContent().equals("Game stopped")) {
@@ -311,7 +407,6 @@ public class DataController {
             this.gameService.addGame(game);
         }
 
-        
         return "redirect:/homepage";
     }
 
@@ -327,25 +422,27 @@ public class DataController {
     public String saveTeam(@ModelAttribute Team team, Model m) {
         System.out.println(team.getImage());
         this.teamService.addTeam(team);
-        
+
         return "redirect:/homepage";
     }
 
-    /*@GetMapping("/getImage/{id}")
-    public byte[] showProductImage(@ModelAttribute int id) {
-        //response.setContentType("image/png"); // Or whatever format you wanna use
-        System.out.println("here");
-        System.out.println(id);
-        Optional<Team> op = this.teamService.getTeam(id);
-        if (op.isPresent()) {
-            Team team = op.get();
-            InputStream is = new ByteArrayInputStream(team.getImage());
-            System.out.println(team.getImage());
-            IOUtils.copy(is, response.getOutputStream());
-
-            return team.getImage();
-        }
-    }*/
+    /*
+     * @GetMapping("/getImage/{id}")
+     * public byte[] showProductImage(@ModelAttribute int id) {
+     * //response.setContentType("image/png"); // Or whatever format you wanna use
+     * System.out.println("here");
+     * System.out.println(id);
+     * Optional<Team> op = this.teamService.getTeam(id);
+     * if (op.isPresent()) {
+     * Team team = op.get();
+     * InputStream is = new ByteArrayInputStream(team.getImage());
+     * System.out.println(team.getImage());
+     * IOUtils.copy(is, response.getOutputStream());
+     * 
+     * return team.getImage();
+     * }
+     * }
+     */
 
     @GetMapping("/addPlayer")
     public String addPlayer(Model m) {
@@ -359,7 +456,7 @@ public class DataController {
     @PostMapping("/savePlayer")
     public String savePlayer(@ModelAttribute Player player, Model m) {
         this.playerService.addPlayer(player);
-        
+
         return "redirect:/homepage";
     }
 
