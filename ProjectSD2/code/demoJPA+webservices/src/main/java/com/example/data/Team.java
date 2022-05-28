@@ -2,7 +2,7 @@ package com.example.data;
 
 import java.util.List;
 import java.util.ArrayList;
-//import java.awt.Image;
+//import java.awt.imagePath;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,24 +15,25 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 @Entity
 @XmlRootElement
 public class Team {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    // @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    private int idApi;
     private String name;
-    private byte[] image;
-    @ManyToMany(mappedBy="teams", cascade = CascadeType.ALL)
+    private String imagePath; // REtorna string (path)
+    @ManyToMany(mappedBy = "teams", cascade = CascadeType.ALL)
     private List<Game> games;
     private int numberWins;
     private int numberLoses;
     private int numberDraws;
 
-    @OneToMany(mappedBy="teamPlayer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "teamPlayer", cascade = CascadeType.ALL)
     private List<Player> players;
 
-    @OneToMany(mappedBy="teamEvent", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "teamEvent", cascade = CascadeType.ALL)
     private List<Event> events;
 
     public Team() {
@@ -55,9 +56,9 @@ public class Team {
         this.numberDraws = 0;
     }
 
-    public Team(String name, byte[] image) {
+    public Team(String name, String imagePath) {
         this.name = name;
-        this.image = image;
+        this.imagePath = imagePath;
         this.games = new ArrayList<>();
         this.players = new ArrayList<>();
         this.events = new ArrayList<>();
@@ -97,7 +98,7 @@ public class Team {
     public List<Game> getGames() {
         return games;
     }
-    
+
     public void setGames(List<Game> games) {
         this.games = games;
     }
@@ -105,7 +106,7 @@ public class Team {
     public List<Player> getPlayers() {
         return players;
     }
-    
+
     public void setPlayers(List<Player> players) {
         this.players = players;
     }
@@ -113,7 +114,7 @@ public class Team {
     public List<Event> getEvents() {
         return events;
     }
-    
+
     public void setEvents(List<Event> events) {
         this.events = events;
     }
@@ -134,12 +135,12 @@ public class Team {
         this.name = name;
     }
 
-    public byte[] getImage() {
-        return image;
+    public String getImage() {
+        return imagePath;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setImage(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public int numberGames() {
@@ -157,5 +158,5 @@ public class Team {
     public String toString() {
         return this.name + " id = " + this.id;
     }
-    
+
 }
