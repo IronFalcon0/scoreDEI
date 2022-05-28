@@ -3,6 +3,7 @@ package com.example.demo;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.ByteArrayInputStream;
@@ -19,6 +20,7 @@ import java.util.Date;
 import com.example.data.Team;
 import com.example.data.Game;
 import com.example.data.User;
+import com.example.data.Role;
 import com.example.data.Event;
 import com.example.data.Player;
 import com.example.formdata.FormData;
@@ -27,6 +29,7 @@ import com.google.gson.JsonObject;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,10 +66,15 @@ public class DataController {
     @Autowired
     PlayerService playerService;
 
+    @Autowired
+    RoleService roleService;
+
+
     int numTeams = 3;
     int numGames = 5;
     int numPlayers = 6;
     String apiKey = "25e4028474ad234869fcfe1da360a9ab";
+
 
     @GetMapping("/getData")
     public String getData() {
@@ -106,7 +114,7 @@ public class DataController {
         var teams = teamService.getAllTeams(); // [t1,t2,...]
         // System.out.println("buscou teams");
         String[] places = { "Lisboa", "Coimbra", "Porto", "Leira", "Braga" };
-        String[] gameStates = { "Game ended", "Game stopped" };
+        String[] gameStates = { "Game not started", "Game stopped", "Game started"};
 
         for (int i = 0; i < numGames; i++) {
             int indexTeam1 = (int) (Math.random() * numTeams) % numTeams;
@@ -118,13 +126,44 @@ public class DataController {
             int indexPlace = (int) (Math.random() * 5) % 5; // o % é só para ter a certeza que n vai out of bounds
             int numGoalsTeam1 = (int) (Math.random() * 4) % 4;
             int numGoalsTeam2 = (int) (Math.random() * 4) % 4;
-            int indexState = (int) (Math.random() * 2) % 2;
+            int indexState = (int) (Math.random() * 3) % 3;
 
             Game game = new Game(places[indexPlace], new Date());
             game.set2Teams(teams.get(indexTeam1), teams.get(indexTeam2));
-            game.setGoalsTeam1(numGoalsTeam1);
-            game.setGoalsTeam2(numGoalsTeam2);
             game.setGameState(gameStates[indexState]);
+            // add goals and start game
+            if (!gameStates[indexState].equals("Game not started")) {
+                Event startEvent = new Event("Game started", game.getDate(), game);
+                this.eventService.addEvent(startEvent);
+
+                if (teams.get(indexTeam1).getPlayers().size() > 0) {
+                    // add goals of team1
+                    List<Player> players = teams.get(indexTeam1).getPlayers();
+                    for (int j = 0; j < numGoalsTeam1; j++) {
+                        Player p = players.get((int) (Math.random() * players.size()) % players.size());
+                        this.eventService.addEvent(new Event("Goal",game.getDate(), game, teams.get(indexTeam1), p));
+                    }
+                }
+                if (teams.get(indexTeam2).getPlayers().size() > 0) {
+                    // add goals of team2
+                    List<Player> players2 = teams.get(indexTeam2).getPlayers();
+                    for (int j = 0; j < numGoalsTeam2; j++) {
+                    Player p = players2.get((int) (Math.random() * players2.size()) % players2.size());
+                    this.eventService.addEvent(new Event("Goal",game.getDate(), game, teams.get(indexTeam2), p));
+                    }
+                }
+
+                game.setGoalsTeam1(numGoalsTeam1);
+                game.setGoalsTeam2(numGoalsTeam2);
+            }
+            
+            if (gameStates[indexState].equals("Game stopped")) {
+                Event stopEvent = new Event("Game stopped", game.getDate(), game);
+                this.eventService.addEvent(stopEvent);
+                game.setIsPaused(true);
+            } else {
+                game.setIsPaused(false);
+            }
             this.gameService.addGame(game);
         }
 
@@ -164,6 +203,7 @@ public class DataController {
                         goals, yellowCards, redCards,
                         teams.get(i));
 
+                newPlayer.getTeamPlayer().addPlayer(newPlayer);
                 this.playerService.addPlayer(newPlayer);
                 if (j == numPlayers - 1)
                     break;
@@ -186,13 +226,14 @@ public class DataController {
         // To Do: retirar imagens
         generateTeams(responseTeams);
 
-        generateGames();
-
         generatePlayers();
+
+        generateGames();
+    
 
         // System.out.println("gerou players");
 
-        var teams = teamService.getAllTeams();
+        /*var teams = teamService.getAllTeams();
         var games = gameService.getAllGames();
         var players = playerService.getAllPlayers();
 
@@ -203,7 +244,7 @@ public class DataController {
         };
 
         for (Event ev : events)
-            this.eventService.addEvent(ev);
+            this.eventService.addEvent(ev);*/
 
         return "redirect:/homepage";
     }
@@ -245,7 +286,48 @@ public class DataController {
 
     @GetMapping("/")
     public String redirect() {
+        Boolean addUser = true;
+        Boolean addAdmin = true;
+
+        List<Role> roles = this.roleService.getAllRoles();
+        for(Role rol: roles) {
+            if(rol.getName().equals("USER"))
+                addUser = false;
+            if(rol.getName().equals("ADMIN"))
+                addAdmin = false;
+        }
+        if(addUser) {
+            this.roleService.addRole(new Role("USER"));
+        }
+        if(addAdmin) {
+            this.roleService.addRole(new Role("ADMIN"));
+        }
+
+        User adminUser = this.userService.getUserByName("admin");
+
+        if (adminUser == null) {
+            Role adminRole = this.roleService.getRoleByName("ADMIN");
+            User admin = new User("admin", "admin", adminRole);
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(admin.getPassword());
+            admin.setPassword(encodedPassword);
+
+            this.userService.addUser(admin);
+
+        }
+
+
+
         return "redirect:/homepage";
+    }
+
+    
+    public User encodePassword(User user) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        
+        return user;
     }
 
     @GetMapping("/gameInfo")
@@ -375,13 +457,16 @@ public class DataController {
     public String addUser(Model m) {
         User us = new User();
         m.addAttribute("user", us);
+        m.addAttribute("roles", this.roleService.getAllRoles());
         return "addUser";
     }
 
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute User user, Model m) {
-        if (user.getName().isBlank() || user.getPassword().isBlank())
+        if (user.getUsername().isBlank() || user.getPassword().isBlank())
             return "redirect:/addUser";
+
+        user = this.encodePassword(user);
 
         this.userService.addUser(user);
         return "redirect:/homepage";
@@ -457,6 +542,16 @@ public class DataController {
     public String savePlayer(@ModelAttribute Player player, Model m) {
         this.playerService.addPlayer(player);
 
+        return "redirect:/homepage";
+    }
+
+    @PostMapping("/logout")
+    public String logout(Model m) {
+        return "redirect:/homepage";
+    }
+
+    @PostMapping("/login")
+    public String login(Model m) {
         return "redirect:/homepage";
     }
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <head>
         <title>Homepage</title>
         <meta charset="utf8"/>
@@ -7,12 +8,29 @@
     <body>        
         <h1>Home</h1>
         <br>
+        <div sec:authorize="isAuthenticated()">
+            Welcome <b><span sec:authentication="name">Username</span></b>
+            <br>
+            <br>
+        </div>
+
+        <div sec:authorize="!isAuthenticated()">
+            <a th:href="@{login}">
+                <button>Login</button>
+            </a>
+            <br>
+        </div>
+        
+        
         <!--Admin functionalities-->
-        <a th:href="@{addUser}">Create User</a><br>
-        <a th:href="@{addTeam}">Create Team</a><br>
-        <a th:href="@{addPlayer}">Create Player</a><br>
-        <a th:href="@{addGame}">Create Game</a><br>
-        <a th:href="@{getData}">Get Data</a><br>
+        <div sec:authorize="hasAnyAuthority('ADMIN')">
+            <a th:href="@{addUser}">Create User</a><br>
+            <a th:href="@{addTeam}">Create Team</a><br>
+            <a th:href="@{addPlayer}">Create Player</a><br>
+            <a th:href="@{addGame}">Create Game</a><br>
+            <a th:href="@{getData}">Get Data</a><br>
+        </div>
+        
 
         <h2>Games</h2>
 
@@ -33,6 +51,13 @@
 
         <br>
         <h2><a th:href="@{stats}">Stats</a></h2>
+
+        <div sec:authorize="isAuthenticated()">
+            <br>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Logout" />
+            </form>
+        </div>
 
     </body>
 </html>
