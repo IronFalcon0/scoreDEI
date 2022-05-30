@@ -19,8 +19,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Team {
     @Id
-    // @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    private int idApi;
     private String name;
     private String imagePath; // REtorna string (path)
     @ManyToMany(mappedBy = "teams", cascade = CascadeType.ALL)
@@ -53,6 +54,7 @@ public class Team {
         this.numberWins = 0;
         this.numberLoses = 0;
         this.numberDraws = 0;
+        this.idApi = 0;
     }
 
     public Team(String name, String imagePath) {
@@ -64,6 +66,20 @@ public class Team {
         this.numberWins = 0;
         this.numberLoses = 0;
         this.numberDraws = 0;
+        this.idApi = 0;
+    }
+
+    public Team(String name, String imagePath, int idApi) {
+        this.name = name;
+        this.imagePath = imagePath;
+        this.idApi = idApi;
+        this.games = new ArrayList<>();
+        this.players = new ArrayList<>();
+        this.events = new ArrayList<>();
+        this.numberWins = 0;
+        this.numberLoses = 0;
+        this.numberDraws = 0;
+        this.idApi = 0;
     }
 
     public void appendEvent(Event event) {
@@ -124,6 +140,14 @@ public class Team {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getIdApi() {
+        return idApi;
+    }
+
+    public void setIdApi(int idApi) {
+        this.id = idApi;
     }
 
     public String getName() {
