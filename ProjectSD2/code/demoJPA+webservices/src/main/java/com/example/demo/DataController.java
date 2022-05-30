@@ -469,6 +469,7 @@ public class DataController {
         }
     }
 
+
     @GetMapping("/addUser")
     public String addUser(Model m) {
         User us = new User();
@@ -484,7 +485,15 @@ public class DataController {
 
         user = this.encodePassword(user);
 
-        this.userService.addUser(user);
+        User u1 = this.userService.getUserByName(user.getUsername());
+
+        if (u1 == null) {
+            this.userService.addUser(user);
+        } else {
+            m.addAttribute("errorMsg", "User already exist!");
+            return "error";
+        }
+        
         return "redirect:/homepage";
     }
 
@@ -492,6 +501,11 @@ public class DataController {
     public String addGame(Model m) {
         Game game = new Game();
         List<Team> teams = this.teamService.getAllTeams();
+
+        if (teams.size() < 2) {
+            m.addAttribute("errorMsg", "Not enough teams to create a game! Please add more teams.");
+            return "error";
+        }
         m.addAttribute("game", game);
         m.addAttribute("teamsAvailable", teams);
 
@@ -529,9 +543,16 @@ public class DataController {
 
     @GetMapping("/addPlayer")
     public String addPlayer(Model m) {
+        List<Team> teams = this.teamService.getAllTeams();
+
+        if (teams.size() < 1) {
+            m.addAttribute("errorMsg", "There are no teams available! Please add teams before adding players.");
+            return "error";
+        }
+
         Player player = new Player();
         m.addAttribute("player", player);
-        m.addAttribute("teams", this.teamService.getAllTeams());
+        m.addAttribute("teams", teams);
 
         return "addPlayer";
     }

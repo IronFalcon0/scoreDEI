@@ -2,7 +2,6 @@
     <div="form-row">
         <div>
             <input type="hidden" th:field="*{id}">
-            <input type="hidden" th:field="*{games}">
             <input type="hidden" th:field="*{numberWins}">
             <input type="hidden" th:field="*{numberLoses}">
             <input type="hidden" th:field="*{numberDraws}">
@@ -17,7 +16,7 @@
         </div>
 
         <div>
-            <input type="file" th:field="*{image}" id="avatar" name="avatar" accept="image/png, image/jpeg">
+            <input type="text" th:field="*{imagePath}" placeholder="Insert URL of team logo (not required)">
         </div>
 
         <br>

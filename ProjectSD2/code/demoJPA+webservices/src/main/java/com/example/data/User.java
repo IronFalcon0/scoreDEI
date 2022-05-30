@@ -24,7 +24,9 @@ public class User {
     @Column(name = "user_id")
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String username, password, email, phone;
+    @Column(unique = true)
+    private String username;
+    private String password, email, phone;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
