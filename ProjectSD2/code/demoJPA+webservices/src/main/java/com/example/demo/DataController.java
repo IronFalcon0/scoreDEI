@@ -74,7 +74,7 @@ public class DataController {
     int numPlayers = 6;
     Boolean gotData = false;
 
-    String apiKey = "25e4028474ad234869fcfe1da360a9ab";
+    String apiKey = "36f29ceca6a9ad66862954e1ffdd472d";
 
     @GetMapping("/getData")
     public String getData() {
@@ -413,6 +413,7 @@ public class DataController {
             switch (event.getContent()) {
                 case "Goal":
                     event.getPlayerEvent().setGoalsScored(event.getPlayerEvent().getGoalsScored() + 1);
+                    event.setTeam(event.getPlayerEvent().getTeamPlayer());
                     Game game = event.getGame();
                     List<Team> ts = game.getTeams();
                     Team t = event.getPlayerEvent().getTeamPlayer();
