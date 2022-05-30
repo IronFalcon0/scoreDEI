@@ -21,7 +21,6 @@ public class Team {
     @Id
     // @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private int idApi;
     private String name;
     private String imagePath; // REtorna string (path)
     @ManyToMany(mappedBy = "teams", cascade = CascadeType.ALL)
