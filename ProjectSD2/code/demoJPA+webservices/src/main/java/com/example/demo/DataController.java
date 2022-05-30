@@ -72,6 +72,8 @@ public class DataController {
     int numTeams = 3;
     int numGames = 5;
     int numPlayers = 6;
+    Boolean gotData = false;
+
     String apiKey = "25e4028474ad234869fcfe1da360a9ab";
 
     @GetMapping("/getData")
@@ -81,11 +83,6 @@ public class DataController {
 
     // @RequestMapping(value = "/getData", method = { RequestMethod.GET,
     // RequestMethod.POST })
-
-    @PostMapping("/createData1")
-    public String getData1(Model model) {
-        return "redirect:/homepage";
-    }
 
     void generateTeams(JSONArray response) {
 
@@ -215,7 +212,10 @@ public class DataController {
 
     @PostMapping("/createData")
     public String getData(Model model) throws JSONException, ParseException {
-
+        if (gotData) {
+            return "redirect:/homepage";
+        }
+        gotData = true;
         JSONArray responseTeams = Unirest
                 .get("https://v3.football.api-sports.io/teams?league=39&season=2018")
                 .header("x-rapidapi-key", apiKey)
