@@ -147,7 +147,7 @@ public class Team {
     }
 
     public void setIdApi(int idApi) {
-        this.id = idApi;
+        this.idApi = idApi;
     }
 
     public String getName() {
