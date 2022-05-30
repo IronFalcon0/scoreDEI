@@ -1,42 +1,52 @@
-<form th:action="@{/saveGame}" th:object="${game}" method="post">
-    <div="form-row">
-        <div>
-            <input type="hidden" th:field="*{id}">
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add Game</title>
+        <link rel="icon" type="image/png" th:href="@{https://cdn.discordapp.com/attachments/905910017805414420/980970760292167720/path1453.png}"/>
+        <meta charset="utf8"/>
+    </head>
 
-        </div>
-        <h1>Add Game</h1>
-        <br>
 
-        <div>
-            <label>Game Date: </label>
-            <input type="datetime-local" th:field="*{date}" required>
-        </div>
+    <form th:action="@{/saveGame}" th:object="${game}" method="post">
+        <div="form-row">
+            <div>
+                <input type="hidden" th:field="*{id}">
 
-        <div>
-            <label>Place: </label>
-            <input type="text" th:field="*{place}" required>
-        </div>
+            </div>
+            <h1>Add Game</h1>
+            <br>
 
-        <div>
-            <label>Team1:</label>
-                <select id="teams" th:field="*{teams}" >
-                    <option th:each="t : ${teamsAvailable}"
-                        th:value="${{t.id}}"
-                        th:text="${t.name}">
-                    </option>
-                </select>
-        </div>
+            <div>
+                <label>Game Date: </label>
+                <input type="datetime-local" th:field="*{date}" required>
+            </div>
 
-        <div>
-            <label>Team2:</label>
-                <select id="teams" th:field="*{teams}" >
-                    <option th:each="t : ${teamsAvailable}"
-                        th:value="${{t.id}}"
-                        th:text="${t.name}">
-                    </option>
-                </select>
+            <div>
+                <label>Place: </label>
+                <input type="text" th:field="*{place}" required>
+            </div>
+
+            <div>
+                <label>Team1:</label>
+                    <select id="teams" th:field="*{teams}" >
+                        <option th:each="t : ${teamsAvailable}"
+                            th:value="${{t.id}}"
+                            th:text="${t.name}">
+                        </option>
+                    </select>
+            </div>
+
+            <div>
+                <label>Team2:</label>
+                    <select id="teams" th:field="*{teams}" >
+                        <option th:each="t : ${teamsAvailable}"
+                            th:value="${{t.id}}"
+                            th:text="${t.name}">
+                        </option>
+                    </select>
+            </div>
+            <br>
+            <button type="submit">Add Game</button>
         </div>
-        <br>
-        <button type="submit">Add Game</button>
-    </div>
-</form>
+    </form>
+</html>

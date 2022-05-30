@@ -2,13 +2,17 @@
 <html>
     <head>
         <title>Team Details</title>
+        <link rel="icon" type="image/png" th:href="@{https://cdn.discordapp.com/attachments/905910017805414420/980970760292167720/path1453.png}"/>
         <meta charset="utf8"/>
     </head>
     <body>
+        <img th:src="@{https://cdn.discordapp.com/attachments/905910017805414420/980975588451950662/g15211.png}" width="319" height="100"/>    
+        <br>
+
         <h1><text th:text="${team.name}">name</text></h1>
         <br>
         <div>
-            <img th:src="${team.imagePath}">
+            <img th:src="${team.imagePath}" width="150" height="150">
         </div>
 
         <table border="1">

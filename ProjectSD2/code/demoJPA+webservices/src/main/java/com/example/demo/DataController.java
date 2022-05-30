@@ -81,8 +81,6 @@ public class DataController {
         return "getData";
     }
 
-    // @RequestMapping(value = "/getData", method = { RequestMethod.GET,
-    // RequestMethod.POST })
 
     void generateTeams(JSONArray response) {
 
@@ -90,10 +88,7 @@ public class DataController {
             var team = response.getJSONObject(i).getJSONObject("team");
             int teamApiId = team.getInt("id");
             Team newTeam = new Team(team.getString("name"), team.getString("logo"));
-            // Team newTeam = new Team(team.getString("name"));
-            System.out.println("Team idapi: " + teamApiId + "and team real id: " + newTeam.getId());
 
-            // System.out.println("This team id is " + newTeam.getId());
             newTeam.setNumberWins((int) (Math.random() * 19));
             newTeam.setNumberLoses((int) (Math.random() * 19));
             newTeam.setNumberLoses((int) (Math.random() * 19));
@@ -107,7 +102,7 @@ public class DataController {
 
     void generateGames() {
         var teams = teamService.getAllTeams(); // [t1,t2,...]
-        // System.out.println("buscou teams");
+
         String[] places = { "Lisboa", "Coimbra", "Porto", "Leira", "Braga" };
         String[] gameStates = { "Game not started", "Game stopped", "Game started" };
 
@@ -167,10 +162,10 @@ public class DataController {
 
     void generatePlayers() throws JSONException, ParseException {
         List<Team> teams = teamService.getAllTeams();
-        System.out.println("Teams size: " + teams.size());
+
         for (int i = 0; i < teams.size(); i++) {
             int id = teams.get(i).getIdApi();
-            System.out.println("teams apid: " + id + " teams id: " + teams.get(i).getId());
+
             Integer goals = 0, yellowCards = 0, redCards = 0;
             JSONArray responsePlayers = Unirest
                     .get("https://v3.football.api-sports.io/players?league=39&season=2018&team=" + id)
@@ -179,15 +174,13 @@ public class DataController {
                     .getBody()
                     .getObject().getJSONArray("response");
 
-            System.out.println("Players size: " + responsePlayers.length());
+
             for (int j = 0; j < responsePlayers.length(); j++) {
 
                 var player = responsePlayers.getJSONObject(j).getJSONObject("player");
                 var stats = responsePlayers.getJSONObject(j).getJSONArray("statistics");
 
-                // int goals = stats.getJSONObject(0).getJSONObject("goals").getInt("total");
-                // System.out.println("Stats size: " + stats.length() + " | " +
-                // stats.getJSONObject(0).length() + " |");
+
                 JSONObject cards = stats.getJSONObject(0).getJSONObject("cards");
 
                 yellowCards = stats.getJSONObject(0).getJSONObject("cards").optInt("yellow");
@@ -224,29 +217,12 @@ public class DataController {
                 .getObject().getJSONArray("response");
 
         // Retirar da API informção (nome) de 20 equipas
-        // To Do: retirar imagens
         generateTeams(responseTeams);
 
         generatePlayers();
 
         generateGames();
 
-        // System.out.println("gerou players");
-
-        /*
-         * var teams = teamService.getAllTeams();
-         * var games = gameService.getAllGames();
-         * var players = playerService.getAllPlayers();
-         * 
-         * // event goal
-         * Event[] events = {
-         * new Event("goal", new Date(), games.get(0), teams.get(0), players.get(0)),
-         * new Event("Game Ended", new Date(), games.get(0))
-         * };
-         * 
-         * for (Event ev : events)
-         * this.eventService.addEvent(ev);
-         */
 
         return "redirect:/homepage";
     }
@@ -278,7 +254,7 @@ public class DataController {
     public String teamInfo(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Team> op = this.teamService.getTeam(id);
         // get player list
-        System.out.println("team 280 id: " + id);
+
         if (op.isPresent()) {
             m.addAttribute("team", op.get());
             m.addAttribute("players", op.get().getPlayers());
@@ -534,7 +510,6 @@ public class DataController {
 
     @PostMapping("/saveTeam")
     public String saveTeam(@ModelAttribute Team team, Model m) {
-        System.out.println(team.getImagePath());
         this.teamService.addTeam(team);
 
         return "redirect:/homepage";

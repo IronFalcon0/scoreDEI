@@ -2,9 +2,12 @@
 <html>
     <head>
         <title>Game Info</title>
+        <link rel="icon" type="image/png" th:href="@{https://cdn.discordapp.com/attachments/905910017805414420/980970760292167720/path1453.png}"/>
         <meta charset="utf8"/>
     </head>
     <body>
+        <img th:src="@{https://cdn.discordapp.com/attachments/905910017805414420/980975588451950662/g15211.png}" width="319" height="100"/>    
+        <br>
         <h1>Game Details</h1>
 
         <h2><text th:text="${game.teams[0].name}">name</text><text> vs </text><text th:text="${game.teams[1].name}">name</text></h2>

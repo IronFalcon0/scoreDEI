@@ -1,28 +1,37 @@
-<form th:action="@{/saveEvent}" th:object="${event}" method="post">
-    <div="form-row">
-        <div>
-            <input type="hidden" th:field="*{id}">
-            <input type="hidden" th:field="*{game}">
-            <input type="hidden" th:field="*{eventTime}">
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add Event</title>
+        <link rel="icon" type="image/png" th:href="@{https://cdn.discordapp.com/attachments/905910017805414420/980970760292167720/path1453.png}"/>
+        <meta charset="utf8"/>
+    </head>
+
+    <form th:action="@{/saveEvent}" th:object="${event}" method="post">
+        <div="form-row">
+            <div>
+                <input type="hidden" th:field="*{id}">
+                <input type="hidden" th:field="*{game}">
+                <input type="hidden" th:field="*{eventTime}">
+                
+            </div>
+            <h1>Change Status</h1>
+            <br>
+
+            <div>
+                <label>Set Status of game: </label>
+                <select th:field="*{content}" id="contentString">
+                    <option value="Game started">Game Started</option>
+                    <option value="Game ended">Game Ended</option>
+                    <option value="Game stopped">Game Stopped</option>
+                    <option value="Game resumed">Game Resumed</option>
+                </select>
+            </div>
+            <br>
             
+
+
+
+            <button type="submit">Add Event</button>
         </div>
-        <h1>Change Status</h1>
-        <br>
-
-        <div>
-            <label>Set Status of game: </label>
-            <select th:field="*{content}" id="contentString">
-                <option value="Game started">Game Started</option>
-                <option value="Game ended">Game Ended</option>
-                <option value="Game stopped">Game Stopped</option>
-                <option value="Game resumed">Game Resumed</option>
-            </select>
-        </div>
-        <br>
-        
-
-
-
-        <button type="submit">Add Event</button>
-    </div>
-</form>
+    </form>
+</html>
