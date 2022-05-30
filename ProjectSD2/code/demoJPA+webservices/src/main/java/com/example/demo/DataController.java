@@ -69,12 +69,12 @@ public class DataController {
     @Autowired
     RoleService roleService;
 
-
     int numTeams = 3;
     int numGames = 5;
     int numPlayers = 6;
-    String apiKey = "36f29ceca6a9ad66862954e1ffdd472d";
+    Boolean gotData = false;
 
+    String apiKey = "36f29ceca6a9ad66862954e1ffdd472d";
 
     @GetMapping("/getData")
     public String getData() {
@@ -84,26 +84,21 @@ public class DataController {
     // @RequestMapping(value = "/getData", method = { RequestMethod.GET,
     // RequestMethod.POST })
 
-    @PostMapping("/createData1")
-    public String getData1(Model model) {
-        return "redirect:/homepage";
-    }
-
     void generateTeams(JSONArray response) {
 
         for (int i = 0; i < response.length(); i++) {
             var team = response.getJSONObject(i).getJSONObject("team");
+            int teamApiId = team.getInt("id");
             Team newTeam = new Team(team.getString("name"), team.getString("logo"));
             // Team newTeam = new Team(team.getString("name"));
-            int teamId = team.getInt("id");
-            // System.out.println("Team id: " + teamId);
+            System.out.println("Team idapi: " + teamApiId + "and team real id: " + newTeam.getId());
 
-            newTeam.setId(teamId);
             // System.out.println("This team id is " + newTeam.getId());
             newTeam.setNumberWins((int) (Math.random() * 19));
             newTeam.setNumberLoses((int) (Math.random() * 19));
             newTeam.setNumberLoses((int) (Math.random() * 19));
 
+            newTeam.setIdApi(teamApiId);
             this.teamService.addTeam(newTeam);
             if (i == numTeams - 1)
                 break;
@@ -114,7 +109,7 @@ public class DataController {
         var teams = teamService.getAllTeams(); // [t1,t2,...]
         // System.out.println("buscou teams");
         String[] places = { "Lisboa", "Coimbra", "Porto", "Leira", "Braga" };
-        String[] gameStates = { "Game not started", "Game stopped", "Game started"};
+        String[] gameStates = { "Game not started", "Game stopped", "Game started" };
 
         for (int i = 0; i < numGames; i++) {
             int indexTeam1 = (int) (Math.random() * numTeams) % numTeams;
@@ -141,21 +136,21 @@ public class DataController {
                     List<Player> players = teams.get(indexTeam1).getPlayers();
                     for (int j = 0; j < numGoalsTeam1; j++) {
                         Player p = players.get((int) (Math.random() * players.size()) % players.size());
-                        this.eventService.addEvent(new Event("Goal",game.getDate(), game, teams.get(indexTeam1), p));
+                        this.eventService.addEvent(new Event("Goal", game.getDate(), game, teams.get(indexTeam1), p));
                     }
                 }
                 if (teams.get(indexTeam2).getPlayers().size() > 0) {
                     // add goals of team2
                     List<Player> players2 = teams.get(indexTeam2).getPlayers();
                     for (int j = 0; j < numGoalsTeam2; j++) {
-                    Player p = players2.get((int) (Math.random() * players2.size()) % players2.size());
-                    this.eventService.addEvent(new Event("Goal",game.getDate(), game, teams.get(indexTeam2), p));
+                        Player p = players2.get((int) (Math.random() * players2.size()) % players2.size());
+                        this.eventService.addEvent(new Event("Goal", game.getDate(), game, teams.get(indexTeam2), p));
                     }
                 }
                 game.setGoalsTeam1(numGoalsTeam1);
                 game.setGoalsTeam2(numGoalsTeam2);
             }
-            
+
             if (gameStates[indexState].equals("Game stopped")) {
                 Event stopEvent = new Event("Game stopped", game.getDate(), game);
                 this.eventService.addEvent(stopEvent);
@@ -172,9 +167,10 @@ public class DataController {
 
     void generatePlayers() throws JSONException, ParseException {
         List<Team> teams = teamService.getAllTeams();
-
+        System.out.println("Teams size: " + teams.size());
         for (int i = 0; i < teams.size(); i++) {
-            int id = teams.get(i).getId();
+            int id = teams.get(i).getIdApi();
+            System.out.println("teams apid: " + id + " teams id: " + teams.get(i).getId());
             Integer goals = 0, yellowCards = 0, redCards = 0;
             JSONArray responsePlayers = Unirest
                     .get("https://v3.football.api-sports.io/players?league=39&season=2018&team=" + id)
@@ -183,6 +179,7 @@ public class DataController {
                     .getBody()
                     .getObject().getJSONArray("response");
 
+            System.out.println("Players size: " + responsePlayers.length());
             for (int j = 0; j < responsePlayers.length(); j++) {
 
                 var player = responsePlayers.getJSONObject(j).getJSONObject("player");
@@ -215,7 +212,10 @@ public class DataController {
 
     @PostMapping("/createData")
     public String getData(Model model) throws JSONException, ParseException {
-
+        if (gotData) {
+            return "redirect:/homepage";
+        }
+        gotData = true;
         JSONArray responseTeams = Unirest
                 .get("https://v3.football.api-sports.io/teams?league=39&season=2018")
                 .header("x-rapidapi-key", apiKey)
@@ -230,22 +230,23 @@ public class DataController {
         generatePlayers();
 
         generateGames();
-    
 
         // System.out.println("gerou players");
 
-        /*var teams = teamService.getAllTeams();
-        var games = gameService.getAllGames();
-        var players = playerService.getAllPlayers();
-
-        // event goal
-        Event[] events = {
-                new Event("goal", new Date(), games.get(0), teams.get(0), players.get(0)),
-                new Event("Game Ended", new Date(), games.get(0))
-        };
-
-        for (Event ev : events)
-            this.eventService.addEvent(ev);*/
+        /*
+         * var teams = teamService.getAllTeams();
+         * var games = gameService.getAllGames();
+         * var players = playerService.getAllPlayers();
+         * 
+         * // event goal
+         * Event[] events = {
+         * new Event("goal", new Date(), games.get(0), teams.get(0), players.get(0)),
+         * new Event("Game Ended", new Date(), games.get(0))
+         * };
+         * 
+         * for (Event ev : events)
+         * this.eventService.addEvent(ev);
+         */
 
         return "redirect:/homepage";
     }
@@ -277,6 +278,7 @@ public class DataController {
     public String teamInfo(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Team> op = this.teamService.getTeam(id);
         // get player list
+        System.out.println("team 280 id: " + id);
         if (op.isPresent()) {
             m.addAttribute("team", op.get());
             m.addAttribute("players", op.get().getPlayers());
@@ -291,16 +293,16 @@ public class DataController {
         Boolean addAdmin = true;
 
         List<Role> roles = this.roleService.getAllRoles();
-        for(Role rol: roles) {
-            if(rol.getName().equals("USER"))
+        for (Role rol : roles) {
+            if (rol.getName().equals("USER"))
                 addUser = false;
-            if(rol.getName().equals("ADMIN"))
+            if (rol.getName().equals("ADMIN"))
                 addAdmin = false;
         }
-        if(addUser) {
+        if (addUser) {
             this.roleService.addRole(new Role("USER"));
         }
-        if(addAdmin) {
+        if (addAdmin) {
             this.roleService.addRole(new Role("ADMIN"));
         }
 
@@ -330,17 +332,14 @@ public class DataController {
 
         }
 
-
-
         return "redirect:/homepage";
     }
 
-    
     public User encodePassword(User user) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        
+
         return user;
     }
 
@@ -466,10 +465,9 @@ public class DataController {
             } else {
                 game.setIsPaused(false);
             }
-            
+
         }
     }
-
 
     @GetMapping("/addUser")
     public String addUser(Model m) {
@@ -494,7 +492,7 @@ public class DataController {
             m.addAttribute("errorMsg", "User already exist!");
             return "error";
         }
-        
+
         return "redirect:/homepage";
     }
 
