@@ -36,7 +36,7 @@
           <div th:switch="${game.isOver}">
             <p th:case="false"><a th:href="@{/gameInfo/changeGameStatus(id=${game.id})}">Change Game Status</a></p>
           </div>
-          <div th:switch="${game.isOver || game.isPaused}">
+          <div th:switch="${!game.isOver && game.isPaused}">
             <p th:case="false"><a th:href="@{/gameInfo/addEvent(id=${game.id})}">Other Event(Goals/Cards)</a></p>
           </div>  
         </div>

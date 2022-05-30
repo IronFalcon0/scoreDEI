@@ -152,7 +152,6 @@ public class DataController {
                     this.eventService.addEvent(new Event("Goal",game.getDate(), game, teams.get(indexTeam2), p));
                     }
                 }
-
                 game.setGoalsTeam1(numGoalsTeam1);
                 game.setGoalsTeam2(numGoalsTeam2);
             }
@@ -160,6 +159,8 @@ public class DataController {
             if (gameStates[indexState].equals("Game stopped")) {
                 Event stopEvent = new Event("Game stopped", game.getDate(), game);
                 this.eventService.addEvent(stopEvent);
+                game.setIsPaused(true);
+            } else if (gameStates[indexState].equals("Game not started")) {
                 game.setIsPaused(true);
             } else {
                 game.setIsPaused(false);
@@ -458,11 +459,13 @@ public class DataController {
 
                 event.getGame().setIsOver(true);
             }
+
             if (event.getContent().equals("Game stopped")) {
                 game.setIsPaused(true);
             } else {
                 game.setIsPaused(false);
             }
+            
         }
     }
 
