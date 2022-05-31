@@ -12,7 +12,6 @@
 
 ## Requirements:
     - Docker
-    - Visual Studio Code
 
 
 ## How to Run
@@ -23,12 +22,12 @@
 
     
 
-    -> Then open in a container inside the folder scoreDEI.
+    -> Then open the folder scoreDEI in a container.
     
 
     -> After it finishes to load all the information necessary, open a zsh terminal, travel to the subfolder demoJPA+webservices and initialize the server by running the following commands:
              
-             cd demoJPA+webservices
+            cd demoJPA+webservices
             
             ./mvnw spring-boot:run
     
