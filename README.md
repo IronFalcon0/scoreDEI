@@ -23,13 +23,14 @@
 
     
 
-    -> Then open in a container the subfolder scoresDei+webservices.
+    -> Then open in a container inside the folder scoreDEI.
+    
 
-    -> After it finishes to load all the information necessary, open a zsh terminal and run the following command:
-
+    -> After it finishes to load all the information necessary, open a zsh terminal, travel to the subfolder demoJPA+webservices and initialize the server by running the following commands:
+             
+             cd demoJPA+webservices
+            
             ./mvnw spring-boot:run
-
-    This command should start the scoresDEI server and create the database. 
     
     -> After that, open a tab on the following URL:
 
