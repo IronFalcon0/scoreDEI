@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add User</title>
+        <link rel="icon" type="image/png" th:href="@{https://cdn.discordapp.com/attachments/905910017805414420/980970760292167720/path1453.png}"/>
+        <meta charset="utf8"/>
+    </head>
+
+    <form th:action="@{/saveUser}" th:object="${user}" method="post">
+        <div="form-row">
+            <div>
+                <input type="hidden" th:field="*{id}">
+                <input type="hidden" th:field="*{enabled}">
+            </div>
+            <h1>Add User</h1>
+            <br>
+
+            <div>
+                <label>Name</label>
+                <input type="text" th:field="*{username}">
+            </div>
+
+            <div>
+                <label>Password</label>
+                <input type="text" th:field="*{password}">
+            </div>
+
+            <div>
+                <label>Email</label>
+                <input type="text" th:field="*{email}">
+            </div>
+
+            <div>
+                <label>Phone Number</label>
+                <input type="number" th:field="*{phone}">
+            </div>
+
+            <div>
+                <label>Select Role:</label>
+                    <select id="role" th:field="*{roles}">
+                        <option th:each="r : ${roles}"
+                            th:value="${{r.id}}"
+                            th:text="${r.name}">
+                        </option>
+                    </select>
+            </div>
+
+            <button type="submit">Add User</button>
+        </div>
+    </form>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head>
+        <title>Stats</title>
+        <link rel="icon" type="image/png" th:href="@{https://cdn.discordapp.com/attachments/905910017805414420/980970760292167720/path1453.png}"/>
+        <meta charset="utf8"/>
+    </head>
+    <body>
+        <img th:src="@{https://cdn.discordapp.com/attachments/905910017805414420/980975588451950662/g15211.png}" width="319" height="100"/>    
+        <br>
+        <h1>Stats</h1>
+        <br>
+
+        <h3>Games</h3>
+        <table border="1">
+            <tr>
+                <th>Team Name</th>
+                <th>Number of games</th>
+            </tr>
+            <tr th:each="team : ${teamsGames}">
+                
+                <td><a th:href="@{teamInfo(id=${team.id})}"><text th:text="${team.name}">name</text></a></td>
+                <td><text th:text="${team.numberWins + team.numberLoses + team.numberDraws}">nGames</text></td>
+            </tr>
+        </table>
+
+        <br>
+        <h3>Best Players</h3>
+
+        <table border="1">
+            <tr>
+                <th>Team Name</th>
+                <th>Best Player Name</th>
+                <th>Goals</th>
+            </tr>
+            <tr th:each="player : ${bestPlayers}">
+                <td><text th:text="${player.getTeamName()}">name</text></td>
+                
+                <td><text th:text="${player.name}">name</text></td>
+                <td><text th:text="${player.goalsScored}">nGoals</text></td>
+            </tr>
+        </table>
+
+        <br>
+        <h3>Wins</h3>
+        <table border="1">
+            <tr>
+                <th>Team Name</th>
+                <th>Number of wins</th>
+            </tr>
+            <tr th:each="team : ${teamsWins}">
+                <td><text th:text="${team.name}">name</text></td>
+                <td><text th:text="${team.numberWins}">nWins</text></td>
+                
+            </tr>
+        </table>
+
+        <br>
+        <h3>Draws</h3>
+        <table border="1">
+            <tr>
+                <th>Team Name</th>
+                <th>Number of Draws</th>
+            </tr>
+            <tr th:each="team : ${teamsDraws}">
+                <td><text th:text="${team.name}">name</text></td>
+                <td><text th:text="${team.numberDraws}">nDraws</text></td>
+                
+            </tr>
+        </table>
+
+        <br>
+        <h3>Loses</h3>
+        <table border="1">
+            <tr>
+                <th>Team Name</th>
+                <th>Number of losses</th>
+            </tr>
+            <tr th:each="team : ${teamsLoses}">
+                <td><text th:text="${team.name}">name</text></td>
+                <td><text th:text="${team.numberLoses}">nLoses</text></td>
+                
+            </tr>
+        </table>
+
+        <br>
+        <a th:href="@{/homepage}">Homepage</a>
+    </body>
+</html>

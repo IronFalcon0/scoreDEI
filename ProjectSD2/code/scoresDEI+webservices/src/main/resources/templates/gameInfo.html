@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Game Info</title>
+        <link rel="icon" type="image/png" th:href="@{https://cdn.discordapp.com/attachments/905910017805414420/980970760292167720/path1453.png}"/>
+        <meta charset="utf8"/>
+    </head>
+    <body>
+        <img th:src="@{https://cdn.discordapp.com/attachments/905910017805414420/980975588451950662/g15211.png}" width="319" height="100"/>    
+        <br>
+        <h1>Game Details</h1>
+
+        <h2><text th:text="${game.teams[0].name}">name</text><text> vs </text><text th:text="${game.teams[1].name}">name</text></h2>
+        <h3><text>Current result: </text><text th:text="${game.goalsTeam1}">team1goals</text> <text> - </text> <text th:text="${game.goalsTeam2}">team1goals</text></h3>
+        <br>
+        <p><text th:text="${game.getDateFormat()}">date</text></p>
+        <p><text>Current status: </text><text th:text="${game.gameState}">gameState</text></p>
+
+        <br>
+        <h3>Event List</h3>
+  
+        <table border="1">
+          <tr>
+            <th>Event</th>
+            <th>Player</th>
+            <th>Team</th>
+            <th>Time</th>
+            
+          </tr>
+          <tr th:each="ev : ${events}">
+            <td th:text="${ev.content}">content</td>
+            <td th:text="${ev.getPlayerName()}">content</td>
+            <td th:text="${ev.getTeamName()}">content</td>
+            <td th:text="${ev.eventTime}">eventTime</td>
+          </tr>
+        </table>
+        <br>
+        <div sec:authorize="isAuthenticated()">
+          <div th:switch="${game.isOver}">
+            <p th:case="false"><a th:href="@{/gameInfo/changeGameStatus(id=${game.id})}">Change Game Status</a></p>
+          </div>
+          <div th:switch="${!game.isOver && game.isPaused}">
+            <p th:case="false"><a th:href="@{/gameInfo/addEvent(id=${game.id})}">Other Event(Goals/Cards)</a></p>
+          </div>  
+        </div>
+        <a th:href="@{/homepage}">Homepage</a>
+    </body>
+</html>

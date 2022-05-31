@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Error</title>
+        <link rel="icon" type="image/png" th:href="@{https://cdn.discordapp.com/attachments/905910017805414420/980970760292167720/path1453.png}"/>
+        <meta charset="utf8"/>
+    </head>
+    <body>        
+        <h1>Error</h1>
+        <br>
+
+        <div>
+            <p th:text="${errorMsg}">error</p>
+            <br>
+
+        </div>
+        <br>
+        <button>
+            <a th:href="@{/homepage}">Homepage</a>
+        </button>
+
+
+
+    </body>
+</html>
